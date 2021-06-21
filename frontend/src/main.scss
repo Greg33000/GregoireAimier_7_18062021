@@ -1,0 +1,28 @@
+$breakpoints:(
+    large-mobile:570px,
+    tablet:740px,
+    desktop:1024px,
+    large-desktop:1240px
+);
+
+// Mixin intégration des médias 
+@mixin large-mobile{
+    @media screen and (max-width:map-get($breakpoints,large-mobile)){
+        @content;
+    }
+}
+@mixin tablet{
+    @media screen and (max-width:map-get($breakpoints,tablet)){
+        @content;
+    }
+}
+@mixin desktop{
+    @media screen and (max-width:map-get($breakpoints,desktop)){
+        @content;
+    }
+}
+@mixin large-desktop{
+    @media screen and (max-width:map-get($breakpoints,large-desktop)){
+        @content;
+    }
+}
