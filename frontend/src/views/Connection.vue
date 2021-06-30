@@ -9,7 +9,7 @@
           <b-col cols="6">
             <b-card bg-variant="light">   
               <b-form-group class="my-3">
-                  <b-input for="email" type="email" v-model="username" class="form-control" placeholder="Adresse email de groupomania" required/>
+                  <b-input for="email" type="email" v-model="email" class="form-control" placeholder="Adresse email de groupomania" required/>
               </b-form-group>
               <b-form-group  class="my-3">
                   <b-input type="password" v-model="password" class="form-control" placeholder="Mot de passe" required/>
@@ -30,7 +30,7 @@
           <img id="img" alt="Icone entreprise" src="../assets/icon-above-font.svg">
           <b-card bg-variant="light">   
             <b-form-group class="my-3">
-                <b-input for="email" type="email" v-model="username" class="form-control" placeholder="Adresse email de groupomania" required/>
+                <b-input for="email" type="email" v-model="email" class="form-control" placeholder="Adresse email de groupomania" required/>
             </b-form-group>
             <b-form-group  class="my-3">
                 <b-input type="password" v-model="password" class="form-control" placeholder="Mot de passe" required/>
@@ -58,7 +58,7 @@ export default {
     data() {
       return {
         // nbre d'enfants
-        username: '',
+        email: '',
         password: '',
         msgError: ''
       }
@@ -67,8 +67,8 @@ export default {
     // attributs calculés
     computed: {
       // attribut [formInvalide]
-      usernameValid() {
-        if (this.username.indexOf("@") >= 1 & this.username.indexOf(".",this.username.indexOf("@")) != -1 & this.username.indexOf(" ") == -1) {
+      emailValid() {
+        if (this.email.indexOf("@") >= 1 & this.email.indexOf(".",this.email.indexOf("@")) != -1 & this.email.indexOf(" ") == -1) {
           return 1
         }
         else {return 0}
@@ -80,7 +80,7 @@ export default {
         else {return 0}
       },
       formValid() {
-        if ((this.usernameValid * this.passwordValid) == 1 ) {
+        if ((this.emailValid * this.passwordValid) == 1 ) {
           return true
         }
         else {return false}
@@ -96,19 +96,19 @@ export default {
     // méthodes
     methods: {
       errorForm() {
-        if (this.passwordValid == 0 & this.usernameValid == 1 ) {
+        if (this.passwordValid == 0 & this.emailValid == 1 ) {
           this.msgError = "Votre mot de passe n'est pas valide"
           return this.msgError
         }
-        if (this.passwordValid == 1 & this.usernameValid == 0 ) {
+        if (this.passwordValid == 1 & this.emailValid == 0 ) {
           this.msgError = "Votre email n'est pas valide"
           return this.msgError
         }
-        if (this.passwordValid == 0 & this.usernameValid == 0 ) {
+        if (this.passwordValid == 0 & this.emailValid == 0 ) {
           this.msgError = "Votre email et votre mot de passe ne sont pas valides"
           return this.msgError
         }
-        if (this.passwordValid == 1 & this.usernameValid == 1 ) {
+        if (this.passwordValid == 1 & this.emailValid == 1 ) {
           this.msgError = ""
           return this.msgError
         }
@@ -116,8 +116,8 @@ export default {
       
       apiPOST(urlDone){
         let jsonBody = { 
-          "Username": this.username,
-          "Password": this.password,
+          "email": this.email,
+          "password": this.password,
         }
         fetch(urlDone, {
           method: "POST",
@@ -138,15 +138,15 @@ export default {
       doSomething() {
         this.errorForm()
         if (this.formValid == true) {
-          //this.apiPOST("http://localhost:8080/api/auth/login")
-          window.location = "http://localhost:8080/#/home";
+          this.apiPOST("http://localhost:3000/api/auth/login")
+          // window.location = "http://localhost:8080/#/home";
         }
       }, 
       
       SdoSomething() {
         this.errorForm()
         if (this.formValid == true) {
-          this.apiPOST("http://localhost:8080/api/auth/signup ")
+          this.apiPOST("http://localhost:3000/api/auth/signup ")
         }
       }, 
       
