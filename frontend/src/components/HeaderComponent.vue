@@ -114,8 +114,8 @@
       logoutUser() {
         this.setUser(null);
         this.setToken(null);
-        console.log(this.$store.state.user);
-        console.log(this.$store.state.token);
+        // console.log(this.$store.state.user);
+        // console.log(this.$store.state.token);
         this.$router.push("/connexion");
       },
     }

@@ -27,10 +27,10 @@ exports.create = (req, res, next) => {
 
 // Retrieve all Tutorials from the database.
 exports.findAll = (req, res) => {
-  // const title = req.query.title;
-  // var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
-
-  Reddit.findAll()
+  const title = req.query.title;
+  var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
+  console.log(title);
+  Reddit.findAll({ where: condition })
     .then(data => {res.send(data)})
     .catch(error => {res.status(500).send({ error });
     });

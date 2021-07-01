@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Connection from '../views/Connection.vue'
 import Home from '../views/Home.vue'
-import Reddit from '../views/Reddit.vue'
+// import Reddit from '../views/Reddit.vue'
 import store from '../store'
 
 
@@ -23,20 +23,18 @@ const routes = [
     path: '/home',
     name: 'Home',
     component: Home,
-    // beforeEnter: (to, from, next) => {
-    //   const loggedIn = this.$store.user;
-    //   if (!loggedIn) {
-    //     next('/connexion');
-    //   } else {
-    //     next();
-    //   }
-    // }
   },
   {
     path: '/reddit',
     name: 'reddit',
-    component: Reddit
+    component: () => import(/* webpackChunkName: "about" */ '../views/Reddit.vue')
   },
+  {
+    path: '/reddit/comments',
+    name: 'redditId',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Ninegag.vue')
+  },
+  
   {
     path: '/9gag',
     name: 'About',

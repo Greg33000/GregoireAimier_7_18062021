@@ -1,7 +1,7 @@
 <template>
   <div>
     <HeaderComponent class="text-center"/>
-    <b-container class="bodyHome">
+    <b-container class="headerPage">
       <b-jumbotron>
         <h1 class="text-center">Bienvenue {{ $store.state.user }}</h1>
         <h2 class="text-center">Voici vos dernières contributions :</h2>
@@ -29,7 +29,7 @@ export default {
 <style lang="scss">
 
   
-  .bodyHome {
+  .headerPage {
     margin-top: 100px;
   }
 </style>
