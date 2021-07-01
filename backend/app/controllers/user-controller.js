@@ -22,10 +22,7 @@ exports.signup = (req, res, next) => {
                 email: req.body.email,
                 password: hash
             };
-            User.create(user)
-            // .then(data => {res.send(data);})
-            //   .then(() => res.status(201).json({ message: 'Objet enregistré !'}))
-            
+            User.create(user)            
             .then(data => {
                 if (req.body.roles) {
                     Role.findAll({
@@ -56,64 +53,40 @@ exports.signup = (req, res, next) => {
     
 
 
-// exports.signup = (req, res) => {
- 
-    
-//     // Save User to Database
-//     User.create({
-//         email: req.body.email,
-//         password: req.body.password
-//         // password: bcrypt.hashSync(req.body.password, 10)
-//     })
-//         .then(user => {
-//             // user role = 1
-//             user.setRoles([1]).then(() => {
-//                 res.send({ message: "User was registered successfully!" });
-//             });
-//         })
-//         .catch(err => {
-//             res.status(500).send({ message: err.message });
-//         });
-// };
-
-// exports.signup = (req, res, next) => {
-//     bcrypt.hash(req.body.password, 10)
-//         .then(hash => {
-//             const user = {
-//                 // email: cryptoJS.SHA1(req.body.email).toString(),
-//                 email: req.body.email,
-//                 password: hash
-//             };
-//             User.create(user)
-//                 .then(data => {res.send(data);})
-//                 // .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
-//                 .catch(error => res.status(400).json({ error }));
-//         })
-//         .catch(error => res.status(500).json({ error }));
-// };
-
 exports.login = (req, res, next) => {
-    // User.findOne({ email: cryptoJS.SHA1(req.body.email).toString() }) // utilisation de crypto JS pour le cryptage des email 
-    // User.findOne({ email: req.body.email }) // utilisation de crypto JS pour le cryptage des email 
-    //     .then(user => {
-    //         if (!user) {
-    //             return res.status(401).json({ error: 'Utilisateur non trouvé !' });
-    //         }
-    //         bcrypt.compare(req.body.password, user.password)
-    //         .then(valid => {
-    //             if (!valid) {
-    //                 return res.status(401).json({ error: 'Mot de passe incorrect !' });
-    //             }
-    //             res.status(200).json({
-    //                 userId: user._id,
-    //                 token: jwt.sign(
-    //                     { userId: user._id, userRole: 'admin' },
-    //                     config.secret,
-    //                     { expiresIn: '24h' }
-    //                 )
-    //             });
-    //         })
-    //         .catch(error => res.status(500).json({ error }));
-    //     })
-    //     .catch(error => res.status(500).json({ error }));
+    User.findOne({
+        where: {
+          email: req.body.email
+        }
+      })
+        .then(user => {
+            if (!user) {
+                return res.status(401).json({ error: 'Utilisateur non trouvé !' });
+            }
+            bcrypt.compare(req.body.password, user.password)
+            .then(valid => {
+                if (!valid) {
+                    return res.status(401).json({ error: 'Mot de passe incorrect !' });
+                }
+                var token = jwt.sign({ id: user.id }, config.secret, {
+                    expiresIn: 86400 // 24 hours
+                  });
+            
+                  var authorities = [];
+                  user.getRoles().then(roles => {
+                    for (let i = 0; i < roles.length; i++) {
+                      authorities.push("ROLE_" + roles[i].name.toUpperCase());
+                    }
+                    res.status(200).send({
+                      id: user.id,
+                      email: user.email,
+                      roles: authorities,
+                    //   accessToken: token
+                        token: token
+                    });
+                  });
+            })
+            .catch(error => res.status(500).json({ error }));
+        })
+        .catch(error => res.status(500).json({ error }));
 };

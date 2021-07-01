@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 import Connection from '../views/Connection.vue'
 import Home from '../views/Home.vue'
 import Reddit from '../views/Reddit.vue'
+import store from '../store'
+
 
 Vue.use(VueRouter)
 
@@ -10,7 +12,7 @@ const routes = [
   {
     path: '/',
     name: 'Redirection',
-    redirect:'/connexion'
+    redirect:'/home'
   },
   {
     path: '/connexion',
@@ -20,7 +22,15 @@ const routes = [
   {
     path: '/home',
     name: 'Home',
-    component: Home
+    component: Home,
+    // beforeEnter: (to, from, next) => {
+    //   const loggedIn = this.$store.user;
+    //   if (!loggedIn) {
+    //     next('/connexion');
+    //   } else {
+    //     next();
+    //   }
+    // }
   },
   {
     path: '/reddit',
@@ -42,8 +52,27 @@ const routes = [
   }
 ]
 
+
 const router = new VueRouter({
   routes
 })
+
+router.beforeEach((to, from, next) => {
+  const publicPages = ['/connexion'];
+  const authRequired = !publicPages.includes(to.path);
+  const loggedIn = store.state.user;
+  // trying to access a restricted page + not logged in
+  // redirect to login page
+  if (authRequired && !loggedIn) {
+    next('/connexion');
+  } else {
+    next();
+  }
+  if (!authRequired && loggedIn) {
+    next('/');
+  } else {
+    next();
+  }
+});
 
 export default router

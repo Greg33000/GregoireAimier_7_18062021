@@ -20,7 +20,7 @@
             <b-dropdown-item>Vos commentaires</b-dropdown-item>
             <b-dropdown-item>Posts aimés</b-dropdown-item>
             <b-dropdown-divider></b-dropdown-divider>
-            <b-dropdown-item tag="router-link" to="/">Se déconnecter</b-dropdown-item>
+            <b-dropdown-item tag="router-link" @click="logoutUser">Se déconnecter</b-dropdown-item>
           </b-nav-item-dropdown>
         </b-nav> 
       </b-row>
@@ -53,7 +53,7 @@
             <b-dropdown-item>Vos commentaires</b-dropdown-item>
             <b-dropdown-item>Posts aimés</b-dropdown-item>
             <b-dropdown-divider></b-dropdown-divider>
-            <b-dropdown-item tag="router-link" to="/">Se déconnecter</b-dropdown-item>
+            <b-dropdown-item tag="router-link" @click="logoutUser">Se déconnecter</b-dropdown-item>
           </b-nav-item-dropdown>
         </b-nav> 
       </b-row>
@@ -62,7 +62,7 @@
 </template>
 
 <script>
-
+  import { mapMutations } from "vuex";
   export default {
     // nom
     name: "ActiveElement",
@@ -104,9 +104,21 @@
         }
         else { return false }
       }
-    }
+    },
 
-    
+    // méthodes
+    methods: {
+      
+      ...mapMutations(["setUser", "setToken"]),
+
+      logoutUser() {
+        this.setUser(null);
+        this.setToken(null);
+        console.log(this.$store.state.user);
+        console.log(this.$store.state.token);
+        this.$router.push("/connexion");
+      },
+    }
   }
 
 

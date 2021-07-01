@@ -44,6 +44,8 @@ bdd.sequelize.sync({ force: true }).then(() => {
   initial();
 });
 
+// bdd.sequelize.sync();
+
 function initial() {
   Role.create({
     id: 1,

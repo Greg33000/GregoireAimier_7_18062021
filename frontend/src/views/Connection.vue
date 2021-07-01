@@ -16,8 +16,8 @@
               </b-form-group>
               <b-form-group  class="my-3">
                 <b-col class="text-center">
-                  <b-button class="mx-2 my-1" variant="primary"  @click="doSomething">Connexion</b-button>
-                  <b-button class="mx-2 my-1" variant="success"  @click="SdoSomething">Créer un compte</b-button>
+                  <b-button class="mx-2 my-1" variant="primary"  @click="loginUser">Connexion</b-button>
+                  <b-button class="mx-2 my-1" variant="success"  @click="createUser">Créer un compte</b-button>
                 </b-col>             
               </b-form-group> 
             </b-card>
@@ -37,8 +37,8 @@
             </b-form-group>
             <b-form-group  class="my-3">
               <b-col class="text-center">
-                <b-button class="mx-2 my-1" variant="primary"  @click="doSomething">Connexion</b-button>
-                <b-button class="mx-2 my-1" variant="success"  @click="SdoSomething">Créer un compte</b-button>
+                <b-button class="mx-2 my-1" variant="primary"  @click="loginUser">Connexion</b-button>
+                <b-button class="mx-2 my-1" variant="success"  @click="createUser">Créer un compte</b-button>
               </b-col>             
             </b-form-group> 
           </b-card>
@@ -51,6 +51,7 @@
 
 <script>
 
+import { mapMutations } from "vuex";
 export default {
     // nom
     name: "Form",
@@ -95,6 +96,9 @@ export default {
 
     // méthodes
     methods: {
+      
+      ...mapMutations(["setUser", "setToken"]),
+
       errorForm() {
         if (this.passwordValid == 0 & this.emailValid == 1 ) {
           this.msgError = "Votre mot de passe n'est pas valide"
@@ -114,39 +118,71 @@ export default {
         }
       },
       
-      apiPOST(urlDone){
-        let jsonBody = { 
-          "email": this.email,
-          "password": this.password,
-        }
-        fetch(urlDone, {
-          method: "POST",
-          headers: {
-            'Accept': 'application/json', 
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(jsonBody)
-        })
-        .then(function(res) {
-          if (res.ok) {
-            return res.json()
-          }
-        })
-      },
-
-
-      doSomething() {
+      loginUser() {
         this.errorForm()
         if (this.formValid == true) {
-          this.apiPOST("http://localhost:3000/api/auth/login")
-          // window.location = "http://localhost:8080/#/home";
+          let jsonBody = { 
+            "email": this.email,
+            "password": this.password,
+          }
+          fetch("http://localhost:3000/api/auth/login", {
+            method: "POST",
+            headers: {
+              'Accept': 'application/json', 
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonBody)
+          })
+
+          .then(function(res) {
+              return res.json();
+          })
+
+          .then(value => {
+            if (!value.error) {
+              this.setUser(value.email);
+              this.setToken(value.token);
+              // console.log(this.$store.state.user);
+              this.$router.push("/home");
+            } else {
+              this.msgError = "Email inconnu. Merci de vous inscrire"
+              return this.msgError
+            }
+        });
         }
       }, 
       
-      SdoSomething() {
+
+      
+      createUser() {
         this.errorForm()
         if (this.formValid == true) {
-          this.apiPOST("http://localhost:3000/api/auth/signup ")
+          let jsonBody = { 
+            "email": this.email,
+            "password": this.password,
+          }
+          fetch("http://localhost:3000/api/auth/signup ", {
+            method: "POST",
+            headers: {
+              'Accept': 'application/json', 
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonBody)
+          })
+
+          .then(function(res) {
+              return res.json();
+          })
+
+          .then(value => {
+            if (!value.error) {
+              this.msgError = "Inscription effectuée. Vous pouvez vous connecter"
+              return this.msgError
+            } else {
+              this.msgError = "Vous êtes déjà inscrits. Veuillez-vous connecter"
+              return this.msgError
+            }
+        });
         }
       }, 
       

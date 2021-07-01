@@ -3,13 +3,14 @@ const router = express.Router();
 const authUser = require('../middleware/auth-user');
 // const authModOrCreator = require('../middleware/auth-mod-Creator');
 const multer = require('../middleware/multer-config');
-const reddit = require("../controllers/reddit-controller.js");
+const redditCtrl = require("../controllers/reddit-controller.js");
 
 
-router.post("/", reddit.create); // Create a new Reddit post
+router.post("/new", redditCtrl.create); // Create a new Reddit post
 // router.post("/",authUser,multer, reddit.create); // Create a new Reddit post
-router.get("/", authUser,reddit.findAll); // Retrieve all Reddit post
-router.get("/:id", authUser, reddit.findOne); // Retrieve a single Reddit post with id
+router.get("/",redditCtrl.findAll); // Retrieve all Reddit post
+// router.get("/", authUser,redditCtrl.findAll); // Retrieve all Reddit post
+router.get("/:id", authUser, redditCtrl.findOne); // Retrieve a single Reddit post with id
 // router.put("/:id", authModOrCreator, multer, reddit.update); // Update a Reddit post with id
 // router.delete("/:id", authModOrCreator, multer,reddit.delete); // Delete aReddit post with id
 // router.delete("/", authModOrCreator, multer, tutorials.deleteAll); // Delete all Tutorials => Not applicable

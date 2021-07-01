@@ -4,7 +4,7 @@ const Op = bdd.Sequelize.Op;
 
 exports.create = (req, res, next) => {
   // Validate request
-  if (!req.body.title) {
+  if (!req.body.title || !req.body.description) {
     res.status(400).send({
       message: "Content can not be empty!"
     });
@@ -14,58 +14,25 @@ exports.create = (req, res, next) => {
     title: req.body.title,
     description: req.body.description,
     // imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-    imageUrl:'test'
+    imageUrl: req.body.image,
+    userId:req.body.userId
   };
   Reddit.create(reddit)
-    .then(data => {res.send(data);})
+    .then(data => {res.send(data)})
     // .then(() => res.status(201).json({ message: 'Objet enregistré !'}))
     .catch(error => res.status(400).json({ error }));
   };
 
-// // Create and Save a new Reddit post
-// exports.create = (req, res) => {
-//   // Validate request
-//   if (!req.body.title) {
-//     res.status(400).send({
-//       message: "Content can not be empty!"
-//     });
-//     return;
-//   }
 
-//   // Create a Tutorial
-//   const reddit = {
-//     title: req.body.title,
-//     description: req.body.description,
-//     url: req.body.published ? req.body.published : false
-//   };
-
-//   // Save Tutorial in the database
-//   Tutorial.create(tutorial)
-//     .then(data => {
-//       res.send(data);
-//     })
-//     .catch(err => {
-//       res.status(500).send({
-//         message:
-//           err.message || "Some error occurred while creating the Tutorial."
-//       });
-//     });
-// };
 
 // Retrieve all Tutorials from the database.
 exports.findAll = (req, res) => {
-  const title = req.query.title;
-  var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
+  // const title = req.query.title;
+  // var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
 
-  Tutorial.findAll({ where: condition })
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving tutorials."
-      });
+  Reddit.findAll()
+    .then(data => {res.send(data)})
+    .catch(error => {res.status(500).send({ error });
     });
 };
 
@@ -73,13 +40,11 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
   const id = req.params.id;
 
-  Tutorial.findByPk(id)
-    .then(data => {
-      res.send(data);
-    })
+  Reddit.findByPk(id)
+    .then(data => {res.send(data);})
     .catch(err => {
       res.status(500).send({
-        message: "Error retrieving Tutorial with id=" + id
+        message: "Error retrieving Post with id=" + id
       });
     });
 };
