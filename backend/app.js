@@ -39,12 +39,12 @@ app.use('/api/auth', userRoutes);
 
 const bdd = require("./app/models");
 const Role = bdd.role;
-// bdd.sequelize.sync({ force: true }).then(() => {
-//   console.log("Drop and re-sync db.");
-//   initial();
-// });
+bdd.sequelize.sync({ force: true }).then(() => {
+  console.log("Drop and re-sync db.");
+  initial();
+});
 
-bdd.sequelize.sync();
+// bdd.sequelize.sync();
 
 function initial() {
   Role.create({

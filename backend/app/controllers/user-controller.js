@@ -5,7 +5,16 @@ const Role = bdd.role;
 const jwt = require('jsonwebtoken');
 const config = require("../config/auth-config.js");
 const Op = bdd.Sequelize.Op;
-// const cryptoJS = require("crypto-js");
+const cryptoJS = require("crypto-js");
+
+ 
+// Encrypt
+var ciphertext = CryptoJS.AES.encrypt('my message', config.secretHash).toString();
+ 
+// Decrypt
+var bytes  = CryptoJS.AES.decrypt(ciphertext, config.secretHash);
+var originalText = bytes.toString(CryptoJS.enc.Utf8);
+
 
 exports.signup = (req, res, next) => {
     // Validate request
@@ -19,8 +28,9 @@ exports.signup = (req, res, next) => {
         .then(hash => {
             const user = {
                 // email: cryptoJS.SHA1(req.body.email).toString(),
-                email: req.body.email,
-                password: hash
+                email: CryptoJS.AES.encrypt(req.body.email, config.secretHash).toString(),
+                password: hash,
+                username: req.body.username,
             };
             User.create(user)            
             .then(data => {
@@ -56,7 +66,7 @@ exports.signup = (req, res, next) => {
 exports.login = (req, res, next) => {
     User.findOne({
         where: {
-          email: req.body.email
+          email: CryptoJS.AES.encrypt(req.body.email, config.secretHash).toString()
         }
       })
         .then(user => {
@@ -68,7 +78,7 @@ exports.login = (req, res, next) => {
                 if (!valid) {
                     return res.status(401).json({ error: 'Mot de passe incorrect !' });
                 }
-                var token = jwt.sign({ id: user.id }, config.secret, {
+                var token = jwt.sign({ id: user.id }, config.secretToken, {
                     expiresIn: 86400 // 24 hours
                   });
             
@@ -79,7 +89,7 @@ exports.login = (req, res, next) => {
                     }
                     res.status(200).send({
                       id: user.id,
-                      email: user.email,
+                      username: user.username,
                       roles: authorities,
                     //   accessToken: token
                         token: token

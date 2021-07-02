@@ -1,7 +1,10 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Connection from '../views/Connection.vue'
+import Signup from '../views/Signup.vue'
 import Home from '../views/Home.vue'
+import NewPost from '../views/NewPost.vue'
+
 // import Reddit from '../views/Reddit.vue'
 import store from '../store'
 
@@ -20,6 +23,11 @@ const routes = [
     component: Connection
   },
   {
+    path: '/identification',
+    name: 'Identification',
+    component: Signup
+  },
+  {
     path: '/home',
     name: 'Home',
     component: Home,
@@ -34,7 +42,11 @@ const routes = [
     name: 'redditId',
     component: () => import(/* webpackChunkName: "about" */ '../views/Ninegag.vue')
   },
-  
+  {
+    path: '/reddit/new',
+    name: 'NewPost',
+    component: NewPost,
+  },
   {
     path: '/9gag',
     name: 'About',
@@ -56,7 +68,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const publicPages = ['/connexion'];
+  const publicPages = ['/connexion','/identification'];
   const authRequired = !publicPages.includes(to.path);
   const loggedIn = store.state.user;
   // trying to access a restricted page + not logged in

@@ -8,11 +8,11 @@
           </b-col>
           <b-col cols="6">
             <b-nav tabs>
-              <b-nav-item class="align-self-end" v-bind:active="true" tag="router-link" to="/connexion">Se connecter</b-nav-item>
-              <b-nav-item class="align-self-end" v-bind:active="false" tag="router-link" to="/identification" >S'identifier</b-nav-item>
+              <b-nav-item class="align-self-end" v-bind:active="false" tag="router-link" to="/connexion">Se connecter</b-nav-item>
+              <b-nav-item class="align-self-end" v-bind:active="true" tag="router-link" to="/identification" >S'identifier</b-nav-item>
             </b-nav>
             <b-card bg-variant="light">   
-              <LoginComponent class="text-center"/>
+              <SignupComponent class="text-center"/> 
             </b-card>
           </b-col>
         </b-row>
@@ -21,11 +21,11 @@
         <b-row class="h-100 align-items-center">
           <img id="img" alt="Icone entreprise" src="../assets/icon-above-font.svg">
           <b-nav tabs>
-            <b-nav-item class="align-self-end" v-bind:active="true" tag="router-link" to="/connexion">Se connecter</b-nav-item>
-            <b-nav-item class="align-self-end" v-bind:active="false" tag="router-link" to="/identification" >S'identifier</b-nav-item>
+            <b-nav-item class="align-self-end" v-bind:active="false" tag="router-link" to="/connexion">Se connecter</b-nav-item>
+            <b-nav-item class="align-self-end" v-bind:active="true" tag="router-link" to="/identification" >S'identifier</b-nav-item>
           </b-nav>
           <b-card bg-variant="light">   
-            <LoginComponent  class="text-center"/>
+            <SignupComponent class="text-center"/> 
           </b-card>
         </b-row>
       </b-jumbotron>
@@ -34,13 +34,13 @@
 </template>
 
 <script>
-import LoginComponent from '../components/LoginComponent.vue';
 
+import SignupComponent from '../components/SignupComponent.vue';
 
 export default {
   name: "Connexion",
   components: {
-    LoginComponent,
+    SignupComponent,
   },
   
   // attributs calculés

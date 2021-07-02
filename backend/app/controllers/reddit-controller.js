@@ -14,8 +14,8 @@ exports.create = (req, res, next) => {
     title: req.body.title,
     description: req.body.description,
     // imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-    imageUrl: req.body.image,
-    userId:req.body.userId
+    imageUrl: "test",
+    userId: 1,
   };
   Reddit.create(reddit)
     .then(data => {res.send(data)})
@@ -29,11 +29,14 @@ exports.create = (req, res, next) => {
 exports.findAll = (req, res) => {
   const title = req.query.title;
   var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
-  console.log(title);
-  Reddit.findAll({ where: condition })
-    .then(data => {res.send(data)})
-    .catch(error => {res.status(500).send({ error });
-    });
+  Reddit.findAll({ 
+    where: condition,
+    order: [
+      ['id', 'DESC'],
+    ], 
+  })
+  .then(data => {res.send(data)})
+  .catch(error => {res.status(500).send({ error });});
 };
 
 // Find a single Tutorial with an id

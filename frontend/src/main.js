@@ -5,7 +5,10 @@ import store from './store'
 
 // plugins
 import BootstrapVue from 'bootstrap-vue'
-Vue.use(BootstrapVue);
+// import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
+
+Vue.use(BootstrapVue)
+// Vue.use(BootstrapVueIcons)
 
 // bootstrap
 import 'bootstrap/dist/css/bootstrap.css'

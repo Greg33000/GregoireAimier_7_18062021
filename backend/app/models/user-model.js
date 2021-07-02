@@ -8,6 +8,11 @@ module.exports = (sequelize, Sequelize) => {
     password: {
       type: Sequelize.STRING,
       allowNull: false
+    },
+    userName: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      unique: "unique_tag"
     }
   });
 
