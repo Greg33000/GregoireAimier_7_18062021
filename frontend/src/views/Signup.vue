@@ -8,11 +8,25 @@
           </b-col>
           <b-col cols="6">
             <b-nav tabs>
-              <b-nav-item class="align-self-end" v-bind:active="false" tag="router-link" to="/connexion">Se connecter</b-nav-item>
-              <b-nav-item class="align-self-end" v-bind:active="true" tag="router-link" to="/identification" >S'identifier</b-nav-item>
+              <b-nav-item class="align-self-end navColor" v-bind:active="false" tag="router-link" to="/signin">Se connecter</b-nav-item>
+              <b-nav-item class="align-self-end navColor" v-bind:active="true" tag="router-link" to="/signup" >Créer un compte</b-nav-item>
             </b-nav>
             <b-card bg-variant="light">   
-              <SignupComponent class="text-center"/> 
+              <b-form-group class="my-3">
+        <b-input for="username" type="text" v-model="username" class="form-control" placeholder="Nom d'utilisateur" required/>
+    </b-form-group>
+    <b-form-group class="my-3">
+        <b-input for="email" type="email" v-model="email" class="form-control" placeholder="Adresse email" required/>
+    </b-form-group>
+    <b-form-group  class="my-3">
+        <b-input type="password" v-model="password" class="form-control" placeholder="Mot de passe" required/>
+    </b-form-group>
+    <b-form-group  class="my-3">
+        <b-col class="text-center">
+            <b-button class="mx-2 my-1" variant="primary"  @click="createUser">Créer un compte</b-button>
+        </b-col>             
+    </b-form-group> 
+    <p class="text-center text-danger">{{msgError}}</p> 
             </b-card>
           </b-col>
         </b-row>
@@ -21,11 +35,25 @@
         <b-row class="h-100 align-items-center">
           <img id="img" alt="Icone entreprise" src="../assets/icon-above-font.svg">
           <b-nav tabs>
-            <b-nav-item class="align-self-end" v-bind:active="false" tag="router-link" to="/connexion">Se connecter</b-nav-item>
-            <b-nav-item class="align-self-end" v-bind:active="true" tag="router-link" to="/identification" >S'identifier</b-nav-item>
+            <b-nav-item class="align-self-end navColor" v-bind:active="false" tag="router-link" to="/signin">Se connecter</b-nav-item>
+            <b-nav-item class="align-self-end navColor" v-bind:active="true" tag="router-link" to="/signup" >Créer un compte</b-nav-item>
           </b-nav>
           <b-card bg-variant="light">   
-            <SignupComponent class="text-center"/> 
+            <b-form-group class="my-3">
+        <b-input for="username" type="text" v-model="username" class="form-control" placeholder="Nom d'utilisateur" required/>
+    </b-form-group>
+    <b-form-group class="my-3">
+        <b-input for="email" type="email" v-model="email" class="form-control" placeholder="Adresse email" required/>
+    </b-form-group>
+    <b-form-group  class="my-3">
+        <b-input type="password" v-model="password" class="form-control" placeholder="Mot de passe" required/>
+    </b-form-group>
+    <b-form-group  class="my-3">
+        <b-col class="text-center">
+            <b-button class="mx-2 my-1" variant="primary"  @click="createUser">Créer un compte</b-button>
+        </b-col>             
+    </b-form-group> 
+    <p class="text-center text-danger">{{msgError}}</p> 
           </b-card>
         </b-row>
       </b-jumbotron>
@@ -35,17 +63,42 @@
 
 <script>
 
-import SignupComponent from '../components/SignupComponent.vue';
+import { mapMutations } from "vuex";
 
 export default {
-  name: "Connexion",
-  components: {
-    SignupComponent,
-  },
+  name: "Signup",
+  data() {
+      return {
+        email: '',
+        password: '',
+        username: '',
+        msgError: ''
+      }
+    },
   
   // attributs calculés
   computed: {
-    
+    emailValid() {
+        if (this.email.indexOf("@") >= 1 & this.email.indexOf(".",this.email.indexOf("@")) != -1 & this.email.indexOf(" ") == -1) {
+          return 1
+        } else {return 0}
+      },
+      passwordValid() {
+        if (this.password.indexOf(" ") == -1 & this.password != '') {
+          return 1
+        } else {return 0}
+      },
+      usernameValid() {
+        if (this.username.indexOf(" ") == -1 & this.username != '') {
+          return 1
+        } else {return 0}
+      },
+      formValid() {
+        if ((this.emailValid * this.passwordValid * this.usernameValid) == 1 ) {
+          return true
+        }
+        else {return false}
+      },
     maxWidth() {
       if (window.matchMedia("(max-width: 770px)").matches) {
         return true
@@ -53,9 +106,76 @@ export default {
     },
   },
   methods: {
-    test() {
-      window.location.href == 'http://localhost:8080/#/indentification';
-    },
+    ...mapMutations(["setUser", "setToken"]),
+
+      errorForm() {
+        if (this.passwordValid == 0 & this.emailValid == 1 & this.usernameValid == 1 ) {
+          this.msgError = "Votre mot de passe n'est pas valide"
+          return this.msgError
+        }
+        if (this.passwordValid == 0 & this.emailValid == 1 & this.usernameValid == 0 ) {
+          this.msgError = "Votre nom d'utilisateur et votre mot de passe ne sont pas valides"
+          return this.msgError
+        }
+        if (this.passwordValid == 1 & this.emailValid == 0 & this.usernameValid == 1 ) {
+          this.msgError = "Votre email n'est pas valide"
+          return this.msgError
+        }
+        if (this.passwordValid == 1 & this.emailValid == 0 & this.usernameValid == 0 ) {
+          this.msgError = "Votre nom d'utilisateur et votre email ne sont pas valides"
+          return this.msgError
+        }
+        if (this.passwordValid == 0 & this.emailValid == 0 & this.usernameValid == 1) {
+          this.msgError = "Votre email et votre mot de passe ne sont pas valides"
+          return this.msgError
+        }
+        if (this.passwordValid == 0 & this.emailValid == 0 & this.usernameValid == 0) {
+          this.msgError = "Votre nom d'utilisateur, votre email et votre mot de passe ne sont pas valides"
+          return this.msgError
+        }
+        if (this.passwordValid == 1 & this.emailValid == 1 & this.usernameValid == 1) {
+          this.msgError = ""
+          return this.msgError
+        }
+        if (this.passwordValid == 1 & this.emailValid == 1 & this.usernameValid == 0) {
+          this.msgError = "Votre nom d'utilisateur n'est pas valide"
+          return this.msgError
+        }
+        
+      },
+            
+      createUser() {
+        this.errorForm()
+        if (this.formValid == true) {
+          let jsonBody = { 
+            "email": this.email,
+            "password": this.password,
+            "username": this.username,
+          };
+          fetch("http://localhost:3000/api/auth/signup ", {
+            method: "POST",
+            headers: {
+              'Accept': 'application/json', 
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jsonBody)
+          })
+
+          .then(function(res) {
+              return res.json();
+          })
+
+          .then(value => {
+            if (!value.error) {
+              this.msgError = "Inscription effectuée. Vous pouvez vous connecter"
+              return this.msgError
+            } else {
+              this.msgError = "Vous êtes déjà inscrits. Veuillez-vous connecter"
+              return this.msgError
+            }
+        });
+        }
+      }, 
   }
 }
 
@@ -72,8 +192,8 @@ export default {
       color: #2c3e50;
       text-decoration: none;
 
-      &.router-link-exact-active {
-        color: red;
-      }
+    }
+    .nav-link .navColor {
+        color: #495057;
     }
 </style>

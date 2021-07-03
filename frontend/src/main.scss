@@ -5,6 +5,10 @@ $breakpoints:(
     large-desktop:1240px
 );
 
+.nav-link{
+    color:#495057;
+}
+
 // Mixin intégration des médias 
 @mixin large-mobile{
     @media screen and (max-width:map-get($breakpoints,large-mobile)){

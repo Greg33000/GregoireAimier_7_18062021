@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Connection from '../views/Connection.vue'
+import Signin from '../views/Signin.vue'
 import Signup from '../views/Signup.vue'
 import Home from '../views/Home.vue'
 import NewPost from '../views/NewPost.vue'
@@ -18,13 +18,13 @@ const routes = [
     redirect:'/home'
   },
   {
-    path: '/connexion',
-    name: 'Connection',
-    component: Connection
+    path: '/signin',
+    name: 'Signin',
+    component: Signin
   },
   {
-    path: '/identification',
-    name: 'Identification',
+    path: '/signup',
+    name: 'Signup',
     component: Signup
   },
   {
@@ -40,7 +40,7 @@ const routes = [
   {
     path: '/reddit/comments',
     name: 'redditId',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Ninegag.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/RedditComments.vue')
   },
   {
     path: '/reddit/new',
@@ -58,7 +58,7 @@ const routes = [
   {
     path:'*',
     name: 'notFound',
-    redirect: '/connexion'
+    redirect: '/signin'
   }
 ]
 
@@ -68,13 +68,13 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const publicPages = ['/connexion','/identification'];
+  const publicPages = ['/signin','/signup'];
   const authRequired = !publicPages.includes(to.path);
   const loggedIn = store.state.user;
   // trying to access a restricted page + not logged in
   // redirect to login page
   if (authRequired && !loggedIn) {
-    next('/connexion');
+    next('/signin');
   } else {
     next();
   }

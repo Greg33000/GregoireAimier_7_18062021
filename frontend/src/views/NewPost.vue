@@ -56,6 +56,7 @@ export default {
             post: {
                 title:"",
                 description:"",
+                username: this.$store.state.user,
             },
             msgError: '' 
         };
@@ -67,7 +68,7 @@ export default {
     methods: {
         createNewPost() {
             if (this.post.title != "" && this.post.description != "" ) {
-
+                console.log(this.post.username);
                 fetch("http://localhost:3000/api/reddit/new", {
                     method: "POST",
                     headers: {

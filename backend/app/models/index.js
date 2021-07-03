@@ -20,9 +20,10 @@ bdd.Sequelize = Sequelize;
 bdd.sequelize = sequelize;
 
 bdd.redditPost = require("./reddit-model.js")(sequelize, Sequelize);
-// bdd.comments = require("./comments-model.js")(sequelize, Sequelize);
+bdd.redditComment = require("./Redditcomment-model.js")(sequelize, Sequelize);
 bdd.user = require("./user-model.js")(sequelize, Sequelize);
 bdd.role = require("./role-model.js")(sequelize, Sequelize);
+bdd.username = require("./username-model.js")(sequelize, Sequelize);
 
 bdd.role.belongsToMany(bdd.user, {
   through: "user_roles",

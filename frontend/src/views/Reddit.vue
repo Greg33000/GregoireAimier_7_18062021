@@ -7,7 +7,7 @@
           <b-row>
             <b-col cols="12" class="input-group mb-3 justify-content-center">
               <b-input type="text" class="form-control" placeholder="Chercher un titre" v-model="title"/>
-              <button class="btn btn-outline-secondary" type="button" @click="seeAllPosts">Chercher</button>
+              <button class="btn btn-outline-secondary" type="button" @click="seeAllPosts('')">Chercher</button>
               <button class="btn btn-outline-secondary" type="button" @click="refreshList">Réinitialiser</button>
             </b-col>
           </b-row>
@@ -19,7 +19,7 @@
         <div class="list row justify-content-center">
           <div class="col-md-8">
           <div class="row">
-            <h1 class="col-10">Posts List</h1>
+            <h1 class="col-10">Liste des posts <span v-if="username != ''"> de {{ username }}</span></h1>
             <span class="col-2 text-danger text-center align-self-center">
               <svg @click="createNewPost" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-plus-circle itemClick"  viewBox="0 0 16 16">
                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
@@ -33,7 +33,9 @@
                 :key="index"
                 >
                 <article>
-                  <header class="putInItalic">publié par {{ post.userId }} il y a {{ datePost(post.createdAt) }}</header>
+                  <header class="putInItalic">publié par 
+                    <a class="text-danger itemClick" @click="seeAllPosts(post)" >{{ post.username }}</a> 
+                    il y a {{ datePost(post.createdAt) }}</header>
                   <div class="itemClick"  @click="setActivePost(post)">
                     <h2>{{ post.title }}</h2>
                     <p>{{ post.description }}</p>
@@ -77,24 +79,39 @@ export default {
       currentIndex: -1,
       title: "",
       today: new Date(Date.now()),
+      username:"",
     };
   },
 
   computed: {
     titleParam() {
-      if (this.title == "") {
-        return ""
-      } else {
-        return "?title=" + this.title.split(' ').join('%20')
-      }
+      return "title=" + this.title.split(' ').join('%20')
     },
+    
+    
   },
-  // diffDate(){
-  //   var datePost = new Date(date);
-  //   var diffDate = (this.today - datePost)*(2.7777777777777776/ 10000000); // calcul en heures
-  // }
+  
 
   methods: {
+    usernameParam(post) {
+      if (post == ""){
+        this.username = "";
+      } else {
+        this.username = post.username;
+        return "username=" + post.username
+      }
+    },
+    urlParam(post) {
+      if (post == "" & this.title == "" ) {
+        return ""
+      } else if (post == "" & this.title != "" ){
+        return "?" + this.titleParam
+      } else if (post != "" & this.title == "" ){
+        return "?" + this.usernameParam(post)
+      } else if (post != "" & this.title != "" ){
+        return "?" + this.usernameParam(post) +"&"+ this.titleParam
+      }
+    },
     datePost(date) {
 
       var datePost = new Date(date);
@@ -112,8 +129,9 @@ export default {
       this.$router.push("/reddit/new");
     },
 
-    seeAllPosts() {
-      fetch("http://localhost:3000/api/reddit" + this.titleParam, {
+    seeAllPosts(post) {
+      
+      fetch("http://localhost:3000/api/reddit" + this.urlParam(post), {
         method: "GET",
         headers: {
           'Accept': 'application/json', 
@@ -126,37 +144,39 @@ export default {
       })
       .then(data => {
         this.posts = data;
-        console.log(this.posts);
+        // console.log(this.posts);
       })           
     },
     refreshList() {
       this.title = "";
-      this.seeAllPosts();
+      this.username = "";
+      this.seeAllPosts("");
       this.currentPost = null;
       this.currentIndex = -1;
     },
-
     setActivePost(post) {
-      fetch("http://localhost:3000/api/reddit/" + post.id, {
-        method: "GET",
-        headers: {
-          'Accept': 'application/json', 
-          'Content-Type': 'application/json',
-          'x-access-token': this.$store.state.token
-        },
-      })
-      .then(function(res) {
-        return res.json();
-      })
-      .then(data => {
-        this.posts = data;
-        this.$router.push("/reddit/comments?postId=" + post.id);
-        console.log(this.posts);
-      })    
+      this.$router.push("/reddit/comments?postId=" + post.id);
+      // fetch("http://localhost:3000/api/reddit/" + post.id, {
+      //   method: "GET",
+      //   headers: {
+      //     'Accept': 'application/json', 
+      //     'Content-Type': 'application/json',
+      //     'x-access-token': this.$store.state.token
+      //   },
+      // })
+      // .then(function(res) {
+      //   return res.json();
+      // })
+      // .then(data => {
+      //   this.posts = data;
+      //   this.$router.push("/reddit/comments?postId=" + post.id);
+      //   console.log(this.posts);
+      // })    
     },
+
   },
   mounted() {
-    this.seeAllPosts();
+    this.seeAllPosts("");
   }, 
 };
 </script>

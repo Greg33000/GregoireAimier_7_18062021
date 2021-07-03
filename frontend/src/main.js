@@ -13,7 +13,7 @@ Vue.use(BootstrapVue)
 // bootstrap
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-
+import './main.scss'
 
 Vue.config.productionTip = false
 

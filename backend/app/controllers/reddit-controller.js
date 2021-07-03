@@ -4,7 +4,7 @@ const Op = bdd.Sequelize.Op;
 
 exports.create = (req, res, next) => {
   // Validate request
-  if (!req.body.title || !req.body.description) {
+  if (!req.body.title || !req.body.description || !req.body.username) {
     res.status(400).send({
       message: "Content can not be empty!"
     });
@@ -15,7 +15,7 @@ exports.create = (req, res, next) => {
     description: req.body.description,
     // imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     imageUrl: "test",
-    userId: 1,
+    username: req.body.username,
   };
   Reddit.create(reddit)
     .then(data => {res.send(data)})
@@ -28,9 +28,11 @@ exports.create = (req, res, next) => {
 // Retrieve all Tutorials from the database.
 exports.findAll = (req, res) => {
   const title = req.query.title;
-  var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
+  const username = req.query.username;
+  var condition1 = title ? { title: { [Op.like]: `%${title}%` } } : null ;
+  var condition2 = username ? { username: { [Op.like]: `%${username}%` } } : null;
   Reddit.findAll({ 
-    where: condition,
+    where: {[Op.and]: [condition1, condition2]},
     order: [
       ['id', 'DESC'],
     ], 
@@ -39,6 +41,7 @@ exports.findAll = (req, res) => {
   .catch(error => {res.status(500).send({ error });});
 };
 
+
 // Find a single Tutorial with an id
 exports.findOne = (req, res) => {
   const id = req.params.id;
@@ -46,7 +49,7 @@ exports.findOne = (req, res) => {
   Reddit.findByPk(id)
     .then(data => {res.send(data);})
     .catch(err => {
-      res.status(500).send({
+      err.status(500).send({
         message: "Error retrieving Post with id=" + id
       });
     });

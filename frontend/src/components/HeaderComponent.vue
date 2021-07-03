@@ -37,7 +37,7 @@
             right
           >
             <b-dropdown-item tag="router-link" to="/home">Home</b-dropdown-item>
-            <b-dropdown-item tag="router-link" to="/reddit">Reddit</b-dropdown-item>
+            <b-dropdown-item tag="router-link" to="/reddit*">Reddit</b-dropdown-item>
             <b-dropdown-item tag="router-link" to="/9gag">9gag</b-dropdown-item>
           </b-nav-item-dropdown>
 
@@ -76,7 +76,12 @@
         else {return false}
       },
       elt2() {
-        if (window.location.href == 'http://localhost:8080/#/reddit' ) {
+
+        var urlCourante = document.location.href;
+        urlCourante = urlCourante.split('reddit')[0]
+        console.log (urlCourante)
+        urlCourante = urlCourante + "reddit";
+        if (urlCourante == 'http://localhost:8080/#/reddit' ) {
           return true
         }
         else {return false}
@@ -150,9 +155,9 @@
       color: #2c3e50;
       text-decoration: none;
 
-      &.router-link-exact-active {
-        color: red;
-      }
+      // &.router-link-exact-active {
+      //   color: red;
+      // }
     }
   }
 </style>

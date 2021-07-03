@@ -8,12 +8,12 @@ const Op = bdd.Sequelize.Op;
 const cryptoJS = require("crypto-js");
 
  
-// Encrypt
-var ciphertext = CryptoJS.AES.encrypt('my message', config.secretHash).toString();
+// // Encrypt
+// var ciphertext = CryptoJS.AES.encrypt('my message', config.secretHash).toString();
  
-// Decrypt
-var bytes  = CryptoJS.AES.decrypt(ciphertext, config.secretHash);
-var originalText = bytes.toString(CryptoJS.enc.Utf8);
+// // Decrypt
+// var bytes  = CryptoJS.AES.decrypt(ciphertext, config.secretHash);
+// var originalText = bytes.toString(CryptoJS.enc.Utf8);
 
 
 exports.signup = (req, res, next) => {
@@ -27,8 +27,8 @@ exports.signup = (req, res, next) => {
     bcrypt.hash(req.body.password, 10)
         .then(hash => {
             const user = {
-                // email: cryptoJS.SHA1(req.body.email).toString(),
-                email: CryptoJS.AES.encrypt(req.body.email, config.secretHash).toString(),
+                emailH: cryptoJS.SHA1(req.body.email).toString(),
+                emailC: cryptoJS.AES.encrypt(req.body.email, config.secretHash).toString(),
                 password: hash,
                 username: req.body.username,
             };
@@ -63,10 +63,10 @@ exports.signup = (req, res, next) => {
     
 
 
-exports.login = (req, res, next) => {
+exports.signin = (req, res, next) => {
     User.findOne({
         where: {
-          email: CryptoJS.AES.encrypt(req.body.email, config.secretHash).toString()
+          emailH: cryptoJS.SHA1(req.body.email).toString()
         }
       })
         .then(user => {
@@ -78,7 +78,7 @@ exports.login = (req, res, next) => {
                 if (!valid) {
                     return res.status(401).json({ error: 'Mot de passe incorrect !' });
                 }
-                var token = jwt.sign({ id: user.id }, config.secretToken, {
+                var token = jwt.sign({ username: user.username }, config.secretToken, {
                     expiresIn: 86400 // 24 hours
                   });
             
@@ -88,10 +88,9 @@ exports.login = (req, res, next) => {
                       authorities.push("ROLE_" + roles[i].name.toUpperCase());
                     }
                     res.status(200).send({
-                      id: user.id,
-                      username: user.username,
-                      roles: authorities,
-                    //   accessToken: token
+                    //   id: user.id,
+                        username: user.username,
+                        roles: authorities,
                         token: token
                     });
                   });
