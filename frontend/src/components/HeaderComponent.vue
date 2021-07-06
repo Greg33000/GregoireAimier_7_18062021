@@ -4,9 +4,9 @@
       <b-row class="align-items-center"></b-row>
       <b-row class="h-100">
         <b-nav tabs>
-          <b-nav-item class="align-self-end" v-bind:active="elt1" tag="router-link" to="/home">Home</b-nav-item>
-          <b-nav-item class="align-self-end" v-bind:active="elt2" tag="router-link" to="/reddit">Reddit</b-nav-item>
-          <b-nav-item class="align-self-end" v-bind:active="elt3" tag="router-link" to="/9gag">9gag</b-nav-item>
+          <b-nav-item class="align-self-end" v-bind:active="elt1" tag="router-link" to="/home">Accueil</b-nav-item>
+          <b-nav-item class="align-self-end" v-bind:active="elt2" tag="router-link" to="/texts">Articles</b-nav-item>
+          <b-nav-item class="align-self-end" v-bind:active="elt3" tag="router-link" to="/images">Images</b-nav-item>
           
           <b-nav-item-dropdown
             id="my-nav-dropdown"
@@ -16,9 +16,9 @@
             right
           >
             <b-dropdown-item>Votre profil</b-dropdown-item>
-            <b-dropdown-item>Vos posts</b-dropdown-item>
-            <b-dropdown-item>Vos commentaires</b-dropdown-item>
-            <b-dropdown-item>Posts aimés</b-dropdown-item>
+            <b-dropdown-item>Vos posts (A venir)</b-dropdown-item>
+            <b-dropdown-item>Vos commentaires (A venir)</b-dropdown-item>
+            <b-dropdown-item>Posts aimés (A venir)</b-dropdown-item>
             <b-dropdown-divider></b-dropdown-divider>
             <b-dropdown-item tag="router-link" @click="logoutUser">Se déconnecter</b-dropdown-item>
           </b-nav-item-dropdown>
@@ -36,9 +36,9 @@
             toggle-class="nav-link-custom"
             right
           >
-            <b-dropdown-item tag="router-link" to="/home">Home</b-dropdown-item>
-            <b-dropdown-item tag="router-link" to="/reddit*">Reddit</b-dropdown-item>
-            <b-dropdown-item tag="router-link" to="/9gag">9gag</b-dropdown-item>
+            <b-dropdown-item tag="router-link" to="/home">Accueil</b-dropdown-item>
+            <b-dropdown-item tag="router-link" to="/texts">Articles</b-dropdown-item>
+            <b-dropdown-item tag="router-link" to="/images">Images</b-dropdown-item>
           </b-nav-item-dropdown>
 
           <b-nav-item-dropdown
@@ -49,9 +49,9 @@
             right
           >
             <b-dropdown-item>Votre profil</b-dropdown-item>
-            <b-dropdown-item>Vos posts</b-dropdown-item>
-            <b-dropdown-item>Vos commentaires</b-dropdown-item>
-            <b-dropdown-item>Posts aimés</b-dropdown-item>
+            <b-dropdown-item>Vos posts (A venir)</b-dropdown-item>
+            <b-dropdown-item>Vos commentaires (A venir)</b-dropdown-item>
+            <b-dropdown-item>Posts aimés (A venir)</b-dropdown-item>
             <b-dropdown-divider></b-dropdown-divider>
             <b-dropdown-item tag="router-link" @click="logoutUser">Se déconnecter</b-dropdown-item>
           </b-nav-item-dropdown>
@@ -78,29 +78,28 @@
       elt2() {
 
         var urlCourante = document.location.href;
-        urlCourante = urlCourante.split('reddit')[0]
-        console.log (urlCourante)
-        urlCourante = urlCourante + "reddit";
-        if (urlCourante == 'http://localhost:8080/#/reddit' ) {
+        urlCourante = urlCourante.split('texts')[0]
+        urlCourante = urlCourante + "texts";
+        if (urlCourante == 'http://localhost:8080/#/texts' ) {
           return true
         }
         else {return false}
       },
       elt3() {
-        if (window.location.href == 'http://localhost:8080/#/9gag' ) {
+        if (window.location.href == 'http://localhost:8080/#/images' ) {
           return true
         }
         else {return false}
       },
       elt(){
         if (this.elt1 == true) {
-          return "Home"
+          return "Accueil"
         } else if (this.elt2 == true) {
-          return "Reddit"
+          return "Articles"
         } else if (this.elt3 == true) {
-          return "9gag"
+          return "Images"
         } else {
-          return "Home"
+          return "Accueil"
         }
       },
       maxWidth() {
@@ -119,8 +118,6 @@
       logoutUser() {
         this.setUser(null);
         this.setToken(null);
-        // console.log(this.$store.state.user);
-        // console.log(this.$store.state.token);
         this.$router.push("/connexion");
       },
     }

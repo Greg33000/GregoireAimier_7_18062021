@@ -1,5 +1,9 @@
 module.exports = (sequelize, Sequelize) => {
-    const RedditComments = sequelize.define("redditComments", {
+    const Reddit = sequelize.define("redditPosts", {
+      title: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
       description: {
         type: Sequelize.STRING,
         allowNull: false,
@@ -11,11 +15,11 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      postId: {
+      nbComments: {
         type: Sequelize.INTEGER,
         allowNull: false,
       }
     });
   
-    return RedditComments;
+    return Reddit;
   };

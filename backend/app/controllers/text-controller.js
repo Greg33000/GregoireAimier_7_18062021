@@ -4,19 +4,37 @@ const Op = bdd.Sequelize.Op;
 
 exports.create = (req, res, next) => {
   // Validate request
-  if (!req.body.title || !req.body.description || !req.body.username) {
+  // delete options.headers['Content-Type'];
+  const parseBody = JSON.parse(req.body.post)
+  console.log(parseBody)
+  // console.log(req.get("post"))
+  
+  if (!parseBody.title || !parseBody.description || !parseBody.username) {
     res.status(400).send({
       message: "Content can not be empty!"
     });
     return;
   }
-  const reddit = {
-    title: req.body.title,
-    description: req.body.description,
-    // imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-    imageUrl: "test",
-    username: req.body.username,
-  };
+  // /console.log(req.file);
+  var reddit = {};
+  if (req.file != null) {
+    reddit = {
+        title: parseBody.title,
+        description: parseBody.description,
+        imageUrl: `${req.protocol}://${req.get('host')}/app/images/${req.file.filename}`,
+        username: parseBody.username,
+        nbComments: 0,
+      };
+  } else {
+    reddit = {
+        title: parseBody.title,
+        description: parseBody.description,
+        username: parseBody.username,
+        nbComments: 0,
+      };
+  
+  }
+  
   Reddit.create(reddit)
     .then(data => {res.send(data)})
     // .then(() => res.status(201).json({ message: 'Objet enregistré !'}))
@@ -54,6 +72,7 @@ exports.findOne = (req, res) => {
       });
     });
 };
+
 
 // Update a Tutorial by the id in the request
 exports.update = (req, res) => {

@@ -64,6 +64,7 @@ exports.signup = (req, res, next) => {
 
 
 exports.signin = (req, res, next) => {
+
     User.findOne({
         where: {
           emailH: cryptoJS.SHA1(req.body.email).toString()

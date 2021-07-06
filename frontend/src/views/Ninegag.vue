@@ -1,10 +1,10 @@
 <template>
-  <div>
-    <div>
+  <div class="background">
+    <div class ="fixed-top bg-white" >
       <HeaderComponent class="text-center"/>
-    </div>
-    <div>
-      <h1>This is the 9gag page</h1>
+      <b-container class="headerPage">
+        <h1 class="text-center">Page en cours de création</h1>
+      </b-container>
     </div>
   </div>
 </template>

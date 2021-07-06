@@ -19,7 +19,7 @@
         <div class="list row justify-content-center">
           <div class="col-md-8">
           <div class="row">
-            <h1 class="col-10">Liste des posts <span v-if="username != ''"> de {{ username }}</span></h1>
+            <h1 class="col-10">Liste des articles <span v-if="username != ''"> de {{ username }}</span></h1>
             <span class="col-2 text-danger text-center align-self-center">
               <svg @click="createNewPost" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-plus-circle itemClick"  viewBox="0 0 16 16">
                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
@@ -41,13 +41,13 @@
                     <p>{{ post.description }}</p>
                   </div>
                   <footer>
-                    <button class="btn btn-outline-secondary border-0 putInItalic" type="button">
+                    <div class="border-0 putInItalic text-secondary" >
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-left-text" viewBox="0 0 16 16">
                         <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
                         <path d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6zm0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/>
                       </svg>
-                      <span> 50 commentaires</span>
-                    </button>
+                      <span> {{ post.nbComments }} commentaire{{ post.nbComments > 1 ? 's' : '' }}</span>
+                    </div>
                   </footer>
                 </article>
               </li>
@@ -102,9 +102,13 @@ export default {
       }
     },
     urlParam(post) {
-      if (post == "" & this.title == "" ) {
+      if (post == "" & this.title == "" & this.username == "" ) {
         return ""
-      } else if (post == "" & this.title != "" ){
+      } else if (post == "" & this.title == "" & this.username != ""  ){
+        return "?username=" +  this.username
+      } else if (post == "" & this.title != "" & this.username != ""  ){
+        return "?username=" +  this.username + "&" + this.titleParam
+      } else if (post == "" & this.title != ""  & this.username == "" ){
         return "?" + this.titleParam
       } else if (post != "" & this.title == "" ){
         return "?" + this.usernameParam(post)
@@ -126,12 +130,12 @@ export default {
     },
 
     createNewPost() {
-      this.$router.push("/reddit/new");
+      this.$router.push("/texts/new");
     },
 
     seeAllPosts(post) {
       
-      fetch("http://localhost:3000/api/reddit" + this.urlParam(post), {
+      fetch("http://localhost:3000/api/texts" + this.urlParam(post), {
         method: "GET",
         headers: {
           'Accept': 'application/json', 
@@ -144,7 +148,6 @@ export default {
       })
       .then(data => {
         this.posts = data;
-        // console.log(this.posts);
       })           
     },
     refreshList() {
@@ -155,23 +158,8 @@ export default {
       this.currentIndex = -1;
     },
     setActivePost(post) {
-      this.$router.push("/reddit/comments?postId=" + post.id);
-      // fetch("http://localhost:3000/api/reddit/" + post.id, {
-      //   method: "GET",
-      //   headers: {
-      //     'Accept': 'application/json', 
-      //     'Content-Type': 'application/json',
-      //     'x-access-token': this.$store.state.token
-      //   },
-      // })
-      // .then(function(res) {
-      //   return res.json();
-      // })
-      // .then(data => {
-      //   this.posts = data;
-      //   this.$router.push("/reddit/comments?postId=" + post.id);
-      //   console.log(this.posts);
-      // })    
+      this.$router.push("/texts/comments?postId=" + post.id);
+      
     },
 
   },

@@ -2,9 +2,10 @@ const express = require('express');
 
 // const helmet = require("helmet");
 // require('dotenv').config();
-const redditRoutes = require('./app/routes/reddit-routes');
+const redditRoutes = require('./app/routes/text-routes');
+const redditCommentsRoutes = require('./app/routes/textcomment-routes');
 const userRoutes = require('./app/routes/user-routes');
-// const path = require('path');
+const path = require('path');
 
 const app = express();
 
@@ -22,14 +23,16 @@ app.use((req, res, next) => {
 
  
 // parse application/json => deprecated. Express le fait depuis la version 4.16+
-app.use(express.json())
+app.use(express.json()) // for json
+app.use(express.urlencoded({ extended: true })) // for form data
 
 
 // pour gérer la ressource image de manière statique
-// app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/app/images', express.static(path.join(__dirname, 'app/images')));
 
 // routes 
-app.use('/api/reddit', redditRoutes);
+app.use('/api/texts', redditRoutes);
+app.use('/api/textcomments', redditCommentsRoutes);
 app.use('/api/auth', userRoutes);
 
 // test fonctionnement

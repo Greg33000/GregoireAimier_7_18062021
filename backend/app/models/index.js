@@ -19,8 +19,8 @@ const bdd = {};
 bdd.Sequelize = Sequelize;
 bdd.sequelize = sequelize;
 
-bdd.redditPost = require("./reddit-model.js")(sequelize, Sequelize);
-bdd.redditComment = require("./Redditcomment-model.js")(sequelize, Sequelize);
+bdd.redditPost = require("./text-model.js")(sequelize, Sequelize);
+bdd.redditComment = require("./textcomment-model.js")(sequelize, Sequelize);
 bdd.user = require("./user-model.js")(sequelize, Sequelize);
 bdd.role = require("./role-model.js")(sequelize, Sequelize);
 bdd.username = require("./username-model.js")(sequelize, Sequelize);

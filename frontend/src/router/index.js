@@ -33,23 +33,23 @@ const routes = [
     component: Home,
   },
   {
-    path: '/reddit',
-    name: 'reddit',
+    path: '/texts',
+    name: 'texts',
     component: () => import(/* webpackChunkName: "about" */ '../views/Reddit.vue')
   },
   {
-    path: '/reddit/comments',
-    name: 'redditId',
+    path: '/texts/comments',
+    name: 'textId',
     component: () => import(/* webpackChunkName: "about" */ '../views/RedditComments.vue')
   },
   {
-    path: '/reddit/new',
-    name: 'NewPost',
+    path: '/texts/new',
+    name: 'NewTextPost',
     component: NewPost,
   },
   {
-    path: '/9gag',
-    name: 'About',
+    path: '/images',
+    name: 'images',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
