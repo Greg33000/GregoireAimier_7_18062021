@@ -63,7 +63,6 @@
 
 <script>
 
-import { mapMutations } from "vuex";
 
 export default {
   name: "Signup",
@@ -106,7 +105,6 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(["setUser", "setToken"]),
 
       errorForm() {
         if (this.passwordValid == 0 & this.emailValid == 1 & this.usernameValid == 1 ) {

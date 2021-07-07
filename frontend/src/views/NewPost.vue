@@ -6,7 +6,7 @@
                 <b-jumbotron>
                     <b-row>
                         <b-col cols="12" class="input-group mb-3 justify-content-center">
-                            <h1> Créer votre Post </h1>
+                            <h1> Créer votre article </h1>
                         </b-col>
                     </b-row>
                 </b-jumbotron>
@@ -18,15 +18,15 @@
                     <b-jumbotron>
                         <b-card bg-variant="light">   
                             <b-form-group class="my-3">
-                                <label for="title">Titre du Post</label>
+                                <label for="title">Titre de l'article</label>
                                 <b-input for="title" type="text" v-model="post.title" class="form-control" placeholder="" required/>
                             </b-form-group>
                             <b-form-group  class="my-3">
-                                <label for="description">Description du Post</label>
+                                <label for="description">Sa description</label>
                                 <b-input for="description" type="text" v-model="post.description" class="form-control" placeholder="" required/>
                             </b-form-group>
                             <b-form-group  class="my-4">
-                                <button class="btn btn-danger " @click="onPickFile">partager un texte (image)</button>
+                                <button class="btn btn-danger " @click="onPickFile">partager un fichier (format image)</button>
                                 <input
                                     type="file"
                                     style="display:none"
@@ -104,7 +104,6 @@ export default {
                     
                 })
                 .then(value => {
-                    console.log(value);
                     if (!value.error) {
                         this.$router.push("/texts");
                     } else {

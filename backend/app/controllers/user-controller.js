@@ -100,3 +100,19 @@ exports.signin = (req, res, next) => {
         })
         .catch(error => res.status(500).json({ error }));
 };
+
+// Delete a Tutorial with the specified id in the request
+exports.deleteUser = (req, res) => {
+    const id = req.params.id;
+  
+    User.destroy({
+      where: { id: id }
+    })
+    .then(data => {res.send(data)})
+    .catch(err => {
+        err.status(500).send({
+            message: "Could not delete your account"
+        });
+    });
+};
+ 

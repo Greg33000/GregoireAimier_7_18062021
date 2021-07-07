@@ -98,7 +98,7 @@
     },
 
     methods: {
-      ...mapMutations(["setUser", "setToken"]),
+    ...mapMutations(["setUser", "setToken","setRoles"]),
 
       errorForm() {
         if (this.passwordValid == 0 & this.emailValid == 1) {
@@ -144,6 +144,8 @@
             if (!value.error) {
               this.setUser(value.username);
               this.setToken(value.token);
+              this.setRoles(value.roles);
+              console.log(value.roles)
               // console.log(this.$store.state.user);
               this.$router.push("/home");
             } else {

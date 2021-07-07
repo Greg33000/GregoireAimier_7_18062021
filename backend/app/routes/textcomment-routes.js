@@ -5,8 +5,11 @@ const authUser = require('../middleware/auth-user');
 
 const redditCommentsCtrl = require("../controllers/textcomment-controller.js");
 
-router.post("/new", redditCommentsCtrl.createComment); // Create a new Reddit post
-router.get("/:postId", redditCommentsCtrl.findAllComments); // Retrieve all Reddit post
+// router.post("/new", redditCommentsCtrl.createComment); // Create a new Reddit post
+// router.get("/:postId", redditCommentsCtrl.findAllComments); // Retrieve all Reddit post
+
+router.post("/new", authUser, redditCommentsCtrl.createComment); // Create a new Reddit post
+router.get("/:postId",authUser, redditCommentsCtrl.findAllComments); // Retrieve all Reddit post
 
 // router.post("/new", multer,redditCtrl.create); // Create a new Reddit post
 // // router.post("/new", authUser,multer, reddit.create); // Create a new Reddit post

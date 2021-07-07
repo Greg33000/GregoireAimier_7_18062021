@@ -113,12 +113,13 @@
     // méthodes
     methods: {
       
-      ...mapMutations(["setUser", "setToken"]),
+      ...mapMutations(["setUser", "setToken","setRoles"]),
 
       logoutUser() {
         this.setUser(null);
         this.setToken(null);
         this.$router.push("/connexion");
+        this.setRoles([]);
       },
     }
   }

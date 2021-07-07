@@ -32,11 +32,11 @@
                 v-for="(post, index) in posts"
                 :key="index"
                 >
-                <article>
+                <article class="overflow-auto">
                   <header class="putInItalic">publié par 
                     <a class="text-danger itemClick" @click="seeAllPosts(post)" >{{ post.username }}</a> 
                     il y a {{ datePost(post.createdAt) }}</header>
-                  <div class="itemClick"  @click="setActivePost(post)">
+                  <div class="itemClick overflow-auto"  @click="setActivePost(post)">
                     <h2>{{ post.title }}</h2>
                     <p>{{ post.description }}</p>
                   </div>
