@@ -1,13 +1,10 @@
 const bdd = require("../models");
-const Reddit = bdd.redditPost;
+const Text = bdd.textPost;
 const Op = bdd.Sequelize.Op;
+const fs = require('fs');
 
 exports.create = (req, res, next) => {
-  // Validate request
-  // delete options.headers['Content-Type'];
   const parseBody = JSON.parse(req.body.post)
-  console.log(parseBody)
-  // console.log(req.get("post"))
   
   if (!parseBody.title || !parseBody.description || !parseBody.username) {
     res.status(400).send({
@@ -15,10 +12,9 @@ exports.create = (req, res, next) => {
     });
     return;
   }
-  // /console.log(req.file);
-  var reddit = {};
+  var text = {};
   if (req.file != null) {
-    reddit = {
+    text = {
         title: parseBody.title,
         description: parseBody.description,
         imageUrl: `${req.protocol}://${req.get('host')}/app/images/${req.file.filename}`,
@@ -26,7 +22,7 @@ exports.create = (req, res, next) => {
         nbComments: 0,
       };
   } else {
-    reddit = {
+    text = {
         title: parseBody.title,
         description: parseBody.description,
         username: parseBody.username,
@@ -35,21 +31,20 @@ exports.create = (req, res, next) => {
   
   }
   
-  Reddit.create(reddit)
+  Text.create(text)
     .then(data => {res.send(data)})
-    // .then(() => res.status(201).json({ message: 'Objet enregistré !'}))
     .catch(error => res.status(400).json({ error }));
   };
 
 
 
-// Retrieve all Tutorials from the database.
+// Retrieve all text Post from the database with or without req.query.
 exports.findAll = (req, res) => {
   const title = req.query.title;
   const username = req.query.username;
   var condition1 = title ? { title: { [Op.like]: `%${title}%` } } : null ;
   var condition2 = username ? { username: { [Op.like]: `%${username}%` } } : null;
-  Reddit.findAll({ 
+  Text.findAll({ 
     where: {[Op.and]: [condition1, condition2]},
     order: [
       ['id', 'DESC'],
@@ -60,11 +55,11 @@ exports.findAll = (req, res) => {
 };
 
 
-// Find a single Tutorial with an id
+// Find a single text post with an id
 exports.findOne = (req, res) => {
   const id = req.params.id;
 
-  Reddit.findByPk(id)
+  Text.findByPk(id)
     .then(data => {res.send(data);})
     .catch(err => {
       err.status(500).send({
@@ -74,53 +69,88 @@ exports.findOne = (req, res) => {
 };
 
 
-// Update a Tutorial by the id in the request
-exports.update = (req, res) => {
-  const id = req.params.id;
+// Update a Text post by the id in the request
+exports.updateText = (req, res) => {
 
-  Tutorial.update(req.body, {
-    where: { id: id }
-  })
-    .then(num => {
-      if (num == 1) {
-        res.send({
-          message: "Tutorial was updated successfully."
-        });
-      } else {
-        res.send({
-          message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found or req.body is empty!`
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: "Error updating Tutorial with id=" + id
-      });
+  const id = req.params.id;
+  const parseBody = JSON.parse(req.body.post)
+  // Inputs verification
+  if (!parseBody.title || !parseBody.description ) {
+    res.status(400).send({
+      message: "Content can not be empty!"
     });
+    return;
+  }
+
+  var text = {};
+  var imgToDelete = false;
+  if (parseBody.editImage == "delete") {
+    text = {
+      title: parseBody.title,
+      description: parseBody.description,
+      imageUrl: null,
+    };
+    imgToDelete = true
+
+  } else 
+  if (req.file != null) {
+    text = {
+      title: parseBody.title,
+      description: parseBody.description,
+      imageUrl: `${req.protocol}://${req.get('host')}/app/images/${req.file.filename}`,
+    };
+    imgToDelete = true
+  } else {
+    text = {
+      title: parseBody.title,
+      description: parseBody.description,
+    };
+  }
+  // console.log(text)
+  Text.findByPk(id)
+  .then(data => {
+    var unlinkFilename = null
+    console.log(text.imageUrl)
+    if (data.imageUrl != null && imgToDelete == true ) {
+      const filename = data.imageUrl.split('/images/')[1];
+      var unlinkFilename = `app//images/${filename}`
+    } else {
+      var unlinkFilename = ``
+    }
+    fs.unlink(unlinkFilename, () => {
+
+      Text.update(text, {
+        where: { id: id }
+      })
+
+      .then(() => {res.send({message: "Text was deleted."})})
+      .catch(error => res.status(400).json({ error }))
+    });
+  })
+  .catch(error => res.status(500).json({ error }));
 };
 
-// Delete a Tutorial with the specified id in the request
-exports.delete = (req, res) => {
+// Delete text-post with the specified id in the request
+exports.deleteText = (req, res) => {
   const id = req.params.id;
-
-  Tutorial.destroy({
-    where: { id: id }
-  })
-    .then(num => {
-      if (num == 1) {
-        res.send({
-          message: "Tutorial was deleted successfully!"
-        });
-      } else {
-        res.send({
-          message: `Cannot delete Tutorial with id=${id}. Maybe Tutorial was not found!`
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: "Could not delete Tutorial with id=" + id
-      });
+  Text.findByPk(id)
+  .then(data => {
+    var unlinkFilename = null
+    if (data.imageUrl != null) {
+      console.log(data.imageUrl)
+      const filename = data.imageUrl.split('/images/')[1];
+      var unlinkFilename = `app//images/${filename}`
+    } else {
+      var unlinkFilename = ``
+    }
+    fs.unlink(unlinkFilename, () => {
+      Text.destroy({
+        where: { id: id }
+      })
+      .then(() => {res.send({message: "Text was deleted."})})
+      .catch(error => res.status(400).json({ error }))
     });
+  })
+  .catch(error => res.status(500).json({ error }));
 };
 

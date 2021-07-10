@@ -3,9 +3,10 @@ import VueRouter from 'vue-router'
 import Signin from '../views/Signin.vue'
 import Signup from '../views/Signup.vue'
 import Home from '../views/Home.vue'
-import NewPost from '../views/NewPost.vue'
-
-// import Reddit from '../views/Reddit.vue'
+import EditText from '../views/EditText.vue'
+import ImgShared from '../views/ImgShared.vue'
+import TxtShared from '../views/TxtShared.vue'
+import TxtComments from '../views/TxtComments.vue'
 import store from '../store'
 
 
@@ -35,25 +36,27 @@ const routes = [
   {
     path: '/texts',
     name: 'texts',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Reddit.vue')
+    component: TxtShared,
   },
   {
     path: '/texts/comments',
     name: 'textId',
-    component: () => import(/* webpackChunkName: "about" */ '../views/RedditComments.vue')
+    component: TxtComments,
+  },
+  {
+    path: '/texts/modify',
+    name: 'TextModify',
+    component: EditText,
   },
   {
     path: '/texts/new',
-    name: 'NewTextPost',
-    component: NewPost,
+    name: 'NewText',
+    component: EditText,
   },
   {
     path: '/images',
     name: 'images',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/Ninegag.vue')
+    component: ImgShared,
   },
   {
     path:'*',
@@ -67,17 +70,20 @@ const router = new VueRouter({
   routes
 })
 
+// verification of unauthorizing access 
 router.beforeEach((to, from, next) => {
   const publicPages = ['/signin','/signup'];
   const authRequired = !publicPages.includes(to.path);
   const loggedIn = store.state.user;
-  // trying to access a restricted page + not logged in
-  // redirect to login page
+
+  // if not logged, go to login page
   if (authRequired && !loggedIn) {
     next('/signin');
   } else {
     next();
   }
+
+  // if there is not route, go to home page
   if (!authRequired && loggedIn) {
     next('/');
   } else {

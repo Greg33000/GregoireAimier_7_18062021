@@ -19,8 +19,8 @@ const bdd = {};
 bdd.Sequelize = Sequelize;
 bdd.sequelize = sequelize;
 
-bdd.redditPost = require("./text-model.js")(sequelize, Sequelize);
-bdd.redditComment = require("./textcomment-model.js")(sequelize, Sequelize);
+bdd.textPost = require("./text-model.js")(sequelize, Sequelize);
+bdd.textComment = require("./textcomment-model.js")(sequelize, Sequelize);
 bdd.user = require("./user-model.js")(sequelize, Sequelize);
 bdd.role = require("./role-model.js")(sequelize, Sequelize);
 bdd.username = require("./username-model.js")(sequelize, Sequelize);
@@ -35,6 +35,11 @@ bdd.user.belongsToMany(bdd.role, {
   foreignKey: "userId",
   otherKey: "roleId"
 });
+bdd.textPost.hasMany(bdd.textComment,{
+  foreignKey: "textPostId",
+  // otherKey: "postId"
+});
+bdd.textComment.belongsTo(bdd.textPost);
 
 bdd.ROLES = ["user", "admin", "moderator"];
 

@@ -1,7 +1,7 @@
 const express = require('express');
 
 // const helmet = require("helmet");
-// require('dotenv').config();
+
 const redditRoutes = require('./app/routes/text-routes');
 const redditCommentsRoutes = require('./app/routes/textcomment-routes');
 const userRoutes = require('./app/routes/user-routes');

@@ -17,7 +17,7 @@ const cryptoJS = require("crypto-js");
 
 
 exports.signup = (req, res, next) => {
-    // Validate request
+
     if (!req.body.email) {
       res.status(400).send({
         message: "Content can not be empty!"

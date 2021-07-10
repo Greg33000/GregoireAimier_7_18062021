@@ -26,12 +26,12 @@
                 </footer>
               </article>
               <div class="row justify-content-center" v-if="moderator === true">
-                <button class="btn btn-outline-primary border-0 putInItalic col-3" type="button" @click="seeComments">
+                <button class="btn btn-outline-primary border-0 putInItalic col-3" type="button" @click="seeTextToModify()">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
                     <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/>
                   </svg>
                 </button>
-                <button class="btn btn-outline-danger border-0 putInItalic col-3" type="button" @click="seeComments">
+                <button class="btn btn-outline-danger border-0 putInItalic col-3" type="button" @click="deleteText()">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
                     <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
                   </svg>
@@ -153,6 +153,15 @@ export default {
   },
 
   methods: {
+    initPageAfterRoutes() {
+      this.comments= [];
+      this.commentsVisibles = true;
+      this.comment.description="";
+      this.today = new Date(Date.now());
+      this.seeAllComments(this.comment.postId)  
+    },
+
+
     setActiveComment(index, description) {
       this.currentIndex = index
       this.currentComment = description
@@ -216,7 +225,7 @@ export default {
         let jsonBody = { 
             "description": this.comment.description,
             "username": this.comment.username,
-            "postId": this.comment.postId,
+            "textPostId": this.comment.postId,
           };         
         fetch("http://localhost:3000/api/textcomments/new", {
           method: "POST",
@@ -233,12 +242,8 @@ export default {
         })
         .then(value => {
           if (!value.error) {
-
-            this.comments= [];
-            this.commentsVisibles = true;
-            this.comment.description="";
-            this.today = new Date(Date.now());
-            this.seeAllComments(this.comment.postId)  
+            this.initPageAfterRoutes()
+            
           }
          });
       } else {
@@ -246,34 +251,33 @@ export default {
       }
     },
     deleteComment(id) {
-      fetch("http://localhost:3000/api/textcomments/" + id , {
-        method: "DELETE",
-        headers: {
-          'Accept': 'application/json', 
-          'Content-Type': 'application/json',
-          'x-access-token': this.$store.state.token
-        },
-      })
-      .then(function(res) {
-        return res.json();
-      })
-      .then(value => {
-        if (!value.error) {
-
-          this.comments= [];
-          this.commentsVisibles = true;
-          this.comment.description="";
-          this.today = new Date(Date.now());
-          this.seeAllComments(this.comment.postId)  
-          }
-      });
+      if (confirm("Voulez-vous vraiment supprimer le commentaire ?")) { // message de confirmation de la suppression du commentaire
+        fetch("http://localhost:3000/api/textcomments/" + id , {
+          method: "DELETE",
+          headers: {
+            'Accept': 'application/json', 
+            'Content-Type': 'application/json',
+            'x-access-token': this.$store.state.token
+          },
+        })
+        .then(function(res) {
+          return res.json();
+        })
+        .then(value => {
+          if (!value.error) {
+            
+            this.initPageAfterRoutes()
+            
+            }
+        });
+      } 
     },
     modifyComment(id) {
       if (this.currentComment != "" ) { 
         let jsonBody = { 
             "description": this.currentComment,
           };         
-        fetch("http://localhost:3000/api/textcomments/new" + id , {
+        fetch("http://localhost:3000/api/textcomments/" + id , {
           method: "PUT",
           headers: {
             'Accept': 'application/json', 
@@ -288,17 +292,41 @@ export default {
         })
         .then(value => {
           if (!value.error) {
-
-            this.comments= [];
-            this.commentsVisibles = true;
-            this.comment.description="";
-            this.today = new Date(Date.now());
-            this.seeAllComments(this.comment.postId)  
+            this.initPageAfterRoutes()
+            this.setActiveComment(-1,'')
           }
          });
       } else {
         alert("Votre commentaire ne doit pas être vide")
       }
+    },
+    deleteText() {
+      if (confirm("Voulez-vous vraiment supprimer le commentaire ?")) { // message de confirmation de la suppression du commentaire
+        fetch("http://localhost:3000/api/texts/" + this.comment.postId , {
+          method: "DELETE",
+          headers: {
+            'Accept': 'application/json', 
+            'Content-Type': 'application/json',
+            'x-access-token': this.$store.state.token
+          },
+        })
+        .then(function(res) {
+          return res.json();
+        })
+        .then(value => {
+          if (!value.error) {
+            
+            this.$router.push("/texts");
+            
+            }
+        });
+      } 
+    },
+    seeTextToModify() {
+      if (this.moderator == true) {
+        this.$router.push("/texts/modify?postId=" + this.comment.postId);
+      }
+      
     },
   },
   mounted() {

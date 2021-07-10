@@ -1,49 +1,40 @@
 const bdd = require("../models");
-const RedditComment = bdd.redditComment;
-const Reddit = bdd.redditPost;
+const TextComment = bdd.textComment;
+const Text = bdd.textPost;
 const Op = bdd.Sequelize.Op;
 
 exports.createComment = (req, res, next) => {
   // console.log(req.body)
-  if (!req.body.description || !req.body.postId || !req.body.username) {
+  if (!req.body.description || !req.body.textPostId || !req.body.username) {
     res.status(400).send({
       message: "Content can not be empty!"
     });
     return;
   }
-  // console.log(req.body.postId)
+  // console.log(req.body.textPostId)
   const comment = {
-    postId: req.body.postId,
+    textPostId: req.body.textPostId,
     description: req.body.description,
     username: req.body.username,
   };
-  RedditComment.create(comment)
+  TextComment.create(comment)
   .then(data => {
     res.send(data)
 
     // ICI on a rajouté la fonction pour mettre à jour le nb de comments pour un texte => Attention, pas de message d'erreur 
-    var condition = data.postId ? { postId: { [Op.like]: `%${data.postId}%` } } : null ;
-    RedditComment.findAll({ 
+    var condition = data.textPostId ? { textPostId: { [Op.like]: `%${data.textPostId}%` } } : null ;
+    TextComment.findAll({ 
       where: condition,
       order: [
         ['id', 'DESC'],
       ], 
     })
     .then(value => {
-      Reddit.update(
+      Text.update(
         {nbComments: value.length}, 
-        {where: { id: data.postId }}
+        {where: { id: data.textPostId }}
         )
-        // .then(num => {
-        //   console.log("NUM : " + num)
-        //   if (num == 1) {
-        //     res.status(200).json({ message: 'Objet enregistré !'})
-        //   } else {
-        //     res.send({
-        //       message: `Cannot update Qty of comments`
-        //     });
-        //    }
-        // })
+
         .catch(err => {
           res.status(500).send({
             message: "Error updating Text post " 
@@ -51,18 +42,16 @@ exports.createComment = (req, res, next) => {
         })
        })
     })
-
-    // .then(() => res.status(201).json({ message: 'Objet enregistré !'}))
-    .catch(error => res.status(400).json({ error }));
-  };
+  .catch(error => res.status(400).json({ error }));
+};
 
   
 
 // Retrieve all Comments from the database.
 exports.findAllComments = (req, res) => {
-  const postId = req.params.postId;
-  var condition = postId ? { postId: { [Op.like]: `%${postId}%` } } : null ;
-  RedditComment.findAll({ 
+  const textPostId = req.params.postId;
+  var condition = textPostId ? { textPostId: { [Op.like]: `%${textPostId}%` } } : null ;
+  TextComment.findAll({ 
     where: condition,
     order: [
       ['id', 'DESC'],
@@ -72,3 +61,83 @@ exports.findAllComments = (req, res) => {
   .catch(error => {res.status(500).send({ error });});
 };
 
+// Delete a comment (for Moderator role) with the specified id in the request
+exports.deleteComment = (req, res) => {
+  const id = req.params.id;
+
+// Récupérer le commentaire pour connaitre l'id du post 
+
+
+TextComment.findByPk(id)
+  .then(data => {
+    TextComment.destroy({
+      where: { id: id }
+    })
+    .then(() => {
+      res.send(data)
+  
+      // ICI on a rajouté la fonction pour mettre à jour le nb de comments pour un texte => Attention, pas de message d'erreur 
+      var condition = data.textPostId ? { textPostId: { [Op.like]: `%${data.textPostId}%` } } : null ;
+      TextComment.findAll({ 
+        where: condition,
+        order: [
+          ['id', 'DESC'],
+        ], 
+      })
+      .then(value => {
+        Text.update(
+          {nbComments: value.length}, 
+          {where: { id: data.textPostId }}
+        )
+        .catch(err => {
+          err.status(500).send({
+            message: "Error updating Text post " 
+          });
+        })
+      })
+    })
+    .catch(error => res.status(400).json({ error }))
+  })
+  .catch(err => {
+    err.status(500).send({
+      message: "Error retrieving Comment with id=" + id
+    });
+  });
+};
+
+
+
+
+// modifie un commentaire avec un id donné
+exports.updateComment = (req, res) => {
+  if (!req.body.description) {
+    res.status(400).send({
+      message: "Content can not be empty!"
+    });
+    return;
+  }
+  
+  
+  const id = req.params.id;
+
+  TextComment.update(
+    {description: req.body.description}, 
+    {where: { id: id }}
+  )
+    .then(num => {
+      if (num == 1) {
+        res.send({
+          message: "Tutorial was updated successfully."
+        });
+      } else {
+        res.send({
+          message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found or req.body is empty!`
+        });
+      }
+    })
+    .catch( () => {
+      res.status(500).send({
+        message: "Error updating Tutorial with id=" + id
+      });
+    });
+};

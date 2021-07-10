@@ -10,12 +10,15 @@ export default new Vuex.Store({
     roles: [],
   },
   mutations: {
+    // keep in the store the username
     setUser(state, user) {
       state.user = user;
     },
+    // keep in the store the token
     setToken(state, token) {
       state.token = token;
     },
+    // keep in the store the roles for the user
     setRoles(state, roles) {
       state.roles = roles;
     },

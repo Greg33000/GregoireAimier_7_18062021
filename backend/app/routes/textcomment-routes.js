@@ -1,15 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const authUser = require('../middleware/auth-user');
-// const authModOrCreator = require('../middleware/auth-mod-Creator');
-
+const authModerator = require('../middleware/auth-moderator');
 const redditCommentsCtrl = require("../controllers/textcomment-controller.js");
 
 // router.post("/new", redditCommentsCtrl.createComment); // Create a new Reddit post
 // router.get("/:postId", redditCommentsCtrl.findAllComments); // Retrieve all Reddit post
 
-router.post("/new", authUser, redditCommentsCtrl.createComment); // Create a new Reddit post
-router.get("/:postId",authUser, redditCommentsCtrl.findAllComments); // Retrieve all Reddit post
+router.post("/new", authUser, redditCommentsCtrl.createComment); // Créer un nouveau commentaire
+router.get("/:postId",authUser, redditCommentsCtrl.findAllComments); // Retrouver tous les commentaires pour un id donné
+router.delete("/:id", authModerator, redditCommentsCtrl.deleteComment); // supprimer un commentaire pour un id donné (moderateur)
+router.put("/:id", authModerator, redditCommentsCtrl.updateComment); // modifier un commentaire pour un id donné (moderateur)
 
 // router.post("/new", multer,redditCtrl.create); // Create a new Reddit post
 // // router.post("/new", authUser,multer, reddit.create); // Create a new Reddit post
