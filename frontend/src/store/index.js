@@ -22,6 +22,10 @@ export default new Vuex.Store({
     setRoles(state, roles) {
       state.roles = roles;
     },
+    // keep in the store the email of the user
+    setEmail(state, email) {
+      state.email = email;
+    },
   },
   actions: {
   },

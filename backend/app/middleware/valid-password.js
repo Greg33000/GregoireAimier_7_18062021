@@ -19,7 +19,7 @@ module.exports = (req, res, next) => {
       next();
   } else {
     res.status(401).json({
-        error: new Error('Mot de passe incorrect !')
+        error: 'Mot de passe incorrect : il doit contenir au minimum 8 caractères dont 2 chiffres, 1 majuscule et une minuscule !'
       });
   }
 };

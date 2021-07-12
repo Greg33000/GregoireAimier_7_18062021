@@ -23,7 +23,6 @@ bdd.textPost = require("./text-model.js")(sequelize, Sequelize);
 bdd.textComment = require("./textcomment-model.js")(sequelize, Sequelize);
 bdd.user = require("./user-model.js")(sequelize, Sequelize);
 bdd.role = require("./role-model.js")(sequelize, Sequelize);
-bdd.username = require("./username-model.js")(sequelize, Sequelize);
 
 bdd.role.belongsToMany(bdd.user, {
   through: "user_roles",
@@ -35,12 +34,12 @@ bdd.user.belongsToMany(bdd.role, {
   foreignKey: "userId",
   otherKey: "roleId"
 });
+
 bdd.textPost.hasMany(bdd.textComment,{
   foreignKey: "textPostId",
-  // otherKey: "postId"
 });
 bdd.textComment.belongsTo(bdd.textPost);
 
-bdd.ROLES = ["user", "admin", "moderator"];
+
 
 module.exports = bdd;

@@ -7,6 +7,7 @@ import EditText from '../views/EditText.vue'
 import ImgShared from '../views/ImgShared.vue'
 import TxtShared from '../views/TxtShared.vue'
 import TxtComments from '../views/TxtComments.vue'
+import Account from '../views/Account.vue'
 import store from '../store'
 
 
@@ -27,6 +28,11 @@ const routes = [
     path: '/signup',
     name: 'Signup',
     component: Signup
+  },
+  {
+    path: '/account',
+    name: 'Account',
+    component: Account
   },
   {
     path: '/home',

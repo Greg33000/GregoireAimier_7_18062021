@@ -4,14 +4,12 @@ const Text = bdd.textPost;
 const Op = bdd.Sequelize.Op;
 
 exports.createComment = (req, res, next) => {
-  // console.log(req.body)
   if (!req.body.description || !req.body.textPostId || !req.body.username) {
     res.status(400).send({
       message: "Content can not be empty!"
     });
     return;
   }
-  // console.log(req.body.textPostId)
   const comment = {
     textPostId: req.body.textPostId,
     description: req.body.description,
@@ -21,7 +19,7 @@ exports.createComment = (req, res, next) => {
   .then(data => {
     res.send(data)
 
-    // ICI on a rajouté la fonction pour mettre à jour le nb de comments pour un texte => Attention, pas de message d'erreur 
+    // ICI on a rajouté la fonction pour mettre à jour le nb de comments pour un texte 
     var condition = data.textPostId ? { textPostId: { [Op.like]: `%${data.textPostId}%` } } : null ;
     TextComment.findAll({ 
       where: condition,
@@ -47,7 +45,7 @@ exports.createComment = (req, res, next) => {
 
   
 
-// Retrieve all Comments from the database.
+// Récupération de tous les commentaires d'une id d'un post
 exports.findAllComments = (req, res) => {
   const textPostId = req.params.postId;
   var condition = textPostId ? { textPostId: { [Op.like]: `%${textPostId}%` } } : null ;
@@ -61,12 +59,11 @@ exports.findAllComments = (req, res) => {
   .catch(error => {res.status(500).send({ error });});
 };
 
-// Delete a comment (for Moderator role) with the specified id in the request
+// Suppression d'un commentaire (pour Moderator role) avec une id de commentaire
 exports.deleteComment = (req, res) => {
   const id = req.params.id;
 
 // Récupérer le commentaire pour connaitre l'id du post 
-
 
 TextComment.findByPk(id)
   .then(data => {
@@ -76,7 +73,7 @@ TextComment.findByPk(id)
     .then(() => {
       res.send(data)
   
-      // ICI on a rajouté la fonction pour mettre à jour le nb de comments pour un texte => Attention, pas de message d'erreur 
+      // ICI on a rajouté la fonction pour mettre à jour le nb de comments pour un texte  
       var condition = data.textPostId ? { textPostId: { [Op.like]: `%${data.textPostId}%` } } : null ;
       TextComment.findAll({ 
         where: condition,

@@ -168,7 +168,7 @@ export default {
               this.msgError = "Inscription effectuée. Vous pouvez vous connecter"
               return this.msgError
             } else {
-              this.msgError = "Vous êtes déjà inscrits. Veuillez-vous connecter"
+              this.msgError = value.error.toString()
               return this.msgError
             }
         });

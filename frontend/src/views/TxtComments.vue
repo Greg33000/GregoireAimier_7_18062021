@@ -5,50 +5,50 @@
     </div>
     <b-container class="CommentPage py-2">
       <b-jumbotron>
-        <div class="list row justify-content-center">
-          <div class="col-md-8">
-            <div class="row my-4">
+        <b-row class="list justify-content-center">
+          <b-col md="8">
+            <b-row class="my-4">
               <article class="list-group-item  my-1 border border-secondary rounded overflow-auto">
                 <header class="putInItalic">publié par {{ post.username }} il y a {{ datePost(post.createdAt) }}</header>
                 <h2>{{ post.title }}</h2>
-                <div class="homeImage col-md-8 border text-center w-100" v-if="post.imageUrl != null">
+                <div class="homeImage col-md-8 border text-center w-100" v-if="post.imageUrl != null" >
                   <img class="redditImage mx-auto " alt="image du post" :src="post.imageUrl">
                 </div>
                 <p>{{ post.description }}</p>
                 <footer>
-                  <button class="btn btn-outline-secondary border-0 putInItalic" type="button" @click="seeComments">
+                  <b-button variant="outline-secondary" class="border-0 putInItalic" @click="seeComments">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-left-text" viewBox="0 0 16 16">
                       <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
                       <path d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6zm0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/>
                     </svg>
                     <span> {{ commentsQty }} commentaire{{ commentsQty > 1 ? 's' : '' }}</span>
-                  </button>
+                  </b-button>
                 </footer>
               </article>
-              <div class="row justify-content-center" v-if="moderator === true">
-                <button class="btn btn-outline-primary border-0 putInItalic col-3" type="button" @click="seeTextToModify()">
+              <b-row class="justify-content-center" v-if="moderator === true">
+                <b-button variant="outline-primary" class="border-0 putInItalic col-3" @click="seeTextToModify()">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
                     <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/>
                   </svg>
-                </button>
-                <button class="btn btn-outline-danger border-0 putInItalic col-3" type="button" @click="deleteText()">
+                </b-button>
+                <b-button variant="outline-danger" class="border-0 putInItalic col-3" @click="deleteText()">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
                     <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
                   </svg>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+                </b-button>
+              </b-row>
+            </b-row>
+          </b-col>
+        </b-row>
       </b-jumbotron>
       <b-jumbotron>
-        <div class="list row justify-content-center my-4">
-          <div class="form-outline col-md-10" v-if="commentsVisibles === true">
+        <b-row class="list justify-content-center my-4">
+          <b-col md="10" class="form-outline" v-if="commentsVisibles === true">
             <label class="form-label" for="textAreaExample">Insérer un commentaire</label>
             
             <textarea class="form-control"  id="textAreaExample" rows="4" v-model="comment.description" required></textarea>
-            <button class="btn btn-success my-2" @click="publishComment">Publier</button>
-          </div>
+            <b-button variant="success" class="my-2" @click="publishComment">Publier</b-button>
+          </b-col>
           <ul class="list-group col-md-8 justify-content-center px-0" v-if="commentsVisibles === true">
             <li class="list-group-item  my-1 border border-secondary rounded overflow-auto"
               v-for="(comment, index) in comments"
@@ -58,40 +58,40 @@
                 <header class="putInItalic">commenté par {{ comment.username }} il y a {{ datePost(comment.createdAt) }}</header>
                 <div>
                   <p v-if="index != currentIndex">{{ comment.description }}</p>
-                  <div v-if="index == currentIndex" class="row">
-                    <div class="col-10 my-2">
-                      <textarea   class="form-control " rows="4" v-model="currentComment" required></textarea>
-                    </div>
-                    <div class="col-2 align-self-center">
-                      <button class="btn btn-success border-0 w-100 my-2" type="button" @click="modifyComment(comment.id)">
+                  <b-row v-if="index == currentIndex">
+                    <b-col col="10" class="my-2">
+                      <textarea class="form-control " rows="4" v-model="currentComment" required></textarea>
+                    </b-col>
+                    <b-col col="2" class="align-self-center">
+                      <b-button variant="success" class="border-0 w-100 my-2" @click="modifyComment(comment.id)">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
                           <path d="M13.485 1.431a1.473 1.473 0 0 1 2.104 2.062l-7.84 9.801a1.473 1.473 0 0 1-2.12.04L.431 8.138a1.473 1.473 0 0 1 2.084-2.083l4.111 4.112 6.82-8.69a.486.486 0 0 1 .04-.045z"/>
                         </svg>
-                      </button>
-                      <button class="btn btn-secondary border-0 w-100 my-2" type="button" @click="setActiveComment(-1,'')">
+                      </b-button>
+                      <b-button variant="secondary" class="border-0 w-100 my-2" @click="setActiveComment(-1,'')">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
                           <path d="M1.293 1.293a1 1 0 0 1 1.414 0L8 6.586l5.293-5.293a1 1 0 1 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 0 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 0 1 0-1.414z"/>
                         </svg>
-                      </button>
-                    </div>
-                  </div>
+                      </b-button>
+                    </b-col>
+                  </b-row>
                 </div>    
               </article>
-              <div class="row justify-content-center" v-if="(moderator === true) && (index != currentIndex) ">
-                <button class="btn btn-outline-primary border-0 col-3" type="button" @click="setActiveComment(index,comment.description)">
+              <b-row class="justify-content-center" v-if="(moderator === true) && (index != currentIndex) ">
+                <b-button  variant="outline-primary" class="border-0 col-3" @click="setActiveComment(index,comment.description)">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
                     <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/>
                   </svg>
-                </button>
-                <button class="btn btn-outline-danger border-0 col-3" type="button" @click="deleteComment(comment.id)">
+                </b-button>
+                <b-button  variant="outline-danger" class="border-0 col-3" @click="deleteComment(comment.id)">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
                     <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
                   </svg>
-                </button>
-              </div>
+                </b-button>
+              </b-row>
             </li>
           </ul>
-        </div>
+        </b-row>
       </b-jumbotron>
     </b-container>
   </div>
@@ -153,6 +153,7 @@ export default {
   },
 
   methods: {
+    
     initPageAfterRoutes() {
       this.comments= [];
       this.commentsVisibles = true;

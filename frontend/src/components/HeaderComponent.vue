@@ -15,12 +15,12 @@
             toggle-class="nav-link-custom"
             right
           >
-            <b-dropdown-item>Votre profil</b-dropdown-item>
+            <b-dropdown-item @click="seeAccount">Votre profil</b-dropdown-item>
             <b-dropdown-item>Vos posts (A venir)</b-dropdown-item>
             <b-dropdown-item>Vos commentaires (A venir)</b-dropdown-item>
             <b-dropdown-item>Posts aimés (A venir)</b-dropdown-item>
             <b-dropdown-divider></b-dropdown-divider>
-            <b-dropdown-item tag="router-link" @click="logoutUser">Se déconnecter</b-dropdown-item>
+            <b-dropdown-item @click="logoutUser">Se déconnecter</b-dropdown-item>
           </b-nav-item-dropdown>
         </b-nav> 
       </b-row>
@@ -48,12 +48,12 @@
             toggle-class="nav-link-custom"
             right
           >
-            <b-dropdown-item>Votre profil</b-dropdown-item>
+            <b-dropdown-item @click="seeAccount">Votre profil</b-dropdown-item>
             <b-dropdown-item>Vos posts (A venir)</b-dropdown-item>
             <b-dropdown-item>Vos commentaires (A venir)</b-dropdown-item>
             <b-dropdown-item>Posts aimés (A venir)</b-dropdown-item>
             <b-dropdown-divider></b-dropdown-divider>
-            <b-dropdown-item tag="router-link" @click="logoutUser">Se déconnecter</b-dropdown-item>
+            <b-dropdown-item @click="logoutUser">Se déconnecter</b-dropdown-item>
           </b-nav-item-dropdown>
         </b-nav> 
       </b-row>
@@ -118,8 +118,11 @@
       logoutUser() {
         this.setUser(null);
         this.setToken(null);
-        this.$router.push("/connexion");
         this.setRoles([]);
+        this.$router.push("/connexion");
+      },
+      seeAccount() {
+        this.$router.push("/account");
       },
     }
   }

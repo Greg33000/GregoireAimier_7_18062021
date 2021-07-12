@@ -3,8 +3,7 @@ const User = bdd.user;
 const Role = bdd.role;
 const jwt = require('jsonwebtoken');
 const config = require("../config/auth-config.js");
-const Op = bdd.Sequelize.Op;
-const cryptoJS = require("crypto-js");
+
 
 module.exports = (req, res, next) => {
     try {

@@ -98,7 +98,7 @@
     },
 
     methods: {
-    ...mapMutations(["setUser", "setToken","setRoles"]),
+    ...mapMutations(["setUser", "setToken","setRoles","setEmail"]),
 
       errorForm() {
         if (this.passwordValid == 0 & this.emailValid == 1) {
@@ -145,11 +145,10 @@
               this.setUser(value.username);
               this.setToken(value.token);
               this.setRoles(value.roles);
-              console.log(value.roles)
-              // console.log(this.$store.state.user);
+              this.setEmail(this.email);
               this.$router.push("/home");
             } else {
-              this.msgError = "Email inconnu. Merci de vous inscrire"
+              this.msgError = value.error.toString()
               return this.msgError
             }
         });

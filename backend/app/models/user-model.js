@@ -5,14 +5,10 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: false,
       unique: "unique"
     },
-    emailH: {
+    email: {
       type: Sequelize.STRING,
       allowNull: false,
       unique: "unique"
-    },
-    emailC: {
-      type: Sequelize.STRING,
-      allowNull: false,
     },
     password: {
       type: Sequelize.STRING,

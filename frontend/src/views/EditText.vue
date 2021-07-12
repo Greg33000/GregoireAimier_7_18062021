@@ -13,8 +13,8 @@
             </b-container>
         </div>
         <b-container class="bodyPage ">
-            <div class="row ">
-                <div class="col-8 mx-auto">
+            <b-row>
+                <b-col cols="8" class="mx-auto">
                     <b-jumbotron>
                         <b-card bg-variant="light my-5">   
                             <b-form-group class="my-3">
@@ -26,35 +26,34 @@
                                 <textarea class="form-control" for="description" id="textAreaExample" rows="4" v-model="post.description" required></textarea>
                             </b-form-group>
                             <b-form-group  class="my-4">
-                                <button class="btn btn-primary " @click="onPickFile">partager un fichier (format image)</button>
+                                <b-button variant="primary" @click="onPickFile" >partager un fichier (format image)</b-button>
                                 <input
-                                    type="file"
+                                    type = "file"
                                     style="display:none"
                                     ref="fileInput"
                                     accept="image/*"
                                     @change="onFilePicked"/>
                                 <div class="my-2 preview">
                                     <img v-if="url" :src="url" />
-                                    <button v-if="url" class="btn btn-danger border-0 my-2 align-top" type="button" @click="suppImg">
+                                    <b-button variant="danger" v-if="url" class="border-0 my-2 align-top" @click="suppImg" >
                                         <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
                                             <path d="M1.293 1.293a1 1 0 0 1 1.414 0L8 6.586l5.293-5.293a1 1 0 1 1 1.414 1.414L9.414 8l5.293 5.293a1 1 0 0 1-1.414 1.414L8 9.414l-5.293 5.293a1 1 0 0 1-1.414-1.414L6.586 8 1.293 2.707a1 1 0 0 1 0-1.414z"/>
                                         </svg>
-                                </button>
+                                    </b-button>
                                 </div>
                                 
                             </b-form-group>
                             <b-form-group  class="my-3">
-                            <b-col class="text-center">
-                                <b-button class="mx-2 my-1" variant="success"  v-if="modifVue" @click="modifyPost"> Mise à jour </b-button>
-                                <b-button class="mx-2 my-1" variant="success"  v-if="!modifVue" @click="createNewPost"> Création </b-button>
-                            </b-col>             
+                                <b-col class="text-center">
+                                    <b-button class="mx-2 my-1" variant="success"  v-if="modifVue" @click="modifyPost" > Mise à jour </b-button>
+                                    <b-button class="mx-2 my-1" variant="success"  v-if="!modifVue" @click="createNewPost" > Création </b-button>
+                                </b-col>             
                             </b-form-group> 
                             <p class="text-center text-danger minHeight">{{msgError}}</p>
                         </b-card>
                     </b-jumbotron>
-                    
-                </div>
-            </div>
+                </b-col>
+            </b-row>
         </b-container>
     </div>
 </template>

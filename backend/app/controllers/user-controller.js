@@ -7,14 +7,6 @@ const config = require("../config/auth-config.js");
 const Op = bdd.Sequelize.Op;
 const cryptoJS = require("crypto-js");
 
- 
-// // Encrypt
-// var ciphertext = CryptoJS.AES.encrypt('my message', config.secretHash).toString();
- 
-// // Decrypt
-// var bytes  = CryptoJS.AES.decrypt(ciphertext, config.secretHash);
-// var originalText = bytes.toString(CryptoJS.enc.Utf8);
-
 
 exports.signup = (req, res, next) => {
 
@@ -27,33 +19,32 @@ exports.signup = (req, res, next) => {
     bcrypt.hash(req.body.password, 10)
         .then(hash => {
             const user = {
-                emailH: cryptoJS.SHA1(req.body.email).toString(),
-                emailC: cryptoJS.AES.encrypt(req.body.email, config.secretHash).toString(),
+                email: cryptoJS.SHA1(req.body.email).toString(),
                 password: hash,
-                username: req.body.username,
+                username: req.body.username.toLowerCase(),
             };
             User.create(user)            
             .then(data => {
-                if (req.body.roles) {
-                    Role.findAll({
-                        where: {
-                            name: {
-                                [Op.or]: req.body.roles
-                            }
-                        }
-                    }).then(roles => {
-                        data.setRoles(roles)
-                        .then(() => {
-                            res.send({ message: "User was registered successfully!" });
-                        });
-                    });
-                } else {
+                // if (req.body.roles) {
+                //     Role.findAll({
+                //         where: {
+                //             name: {
+                //                 [Op.or]: req.body.roles
+                //             }
+                //         }
+                //     }).then(roles => {
+                //         data.setRoles(roles)
+                //         .then(() => {
+                //             res.send({ message: "User was registered successfully!" });
+                //         });
+                //     });
+                // } else {
                   // user role = 1
                     data.setRoles([1])
                     .then(() => {
                         res.send({ message: "User was registered successfully!" });
                     });
-                }
+                //}
             })
             .catch(error => res.status(400).json({ error }));
         })
@@ -67,13 +58,14 @@ exports.signin = (req, res, next) => {
 
     User.findOne({
         where: {
-          emailH: cryptoJS.SHA1(req.body.email).toString()
+          email: cryptoJS.SHA1(req.body.email).toString()
         }
       })
         .then(user => {
             if (!user) {
-                return res.status(401).json({ error: 'Utilisateur non trouvé !' });
+                return res.status(401).json({ error: 'Utilisateur introuvable !' });
             }
+            
             bcrypt.compare(req.body.password, user.password)
             .then(valid => {
                 if (!valid) {
@@ -103,16 +95,34 @@ exports.signin = (req, res, next) => {
 
 // Delete a Tutorial with the specified id in the request
 exports.deleteUser = (req, res) => {
-    const id = req.params.id;
+    const username = req.params.id;
   
     User.destroy({
-      where: { id: id }
+      where: { username: username }
     })
-    .then(data => {res.send(data)})
+    .then(() => {res.send({message: "User was deleted."})})
     .catch(err => {
-        err.status(500).send({
+        res.status(500).send({
             message: "Could not delete your account"
         });
     });
 };
+
+exports.seeUser = (req, res) => {
+    const username = req.params.id;
+    
+    User.findOne({
+        where: {
+          username: username
+        }
+    })
+    .then(user => {
+        if (!user) {
+            return res.status(401).json({ error: 'Utilisateur non trouvé !' });
+        };
+        res.status(200).send(user);
+    })    
+    .catch(error => res.status(500).json({ error }));
+};
+
  

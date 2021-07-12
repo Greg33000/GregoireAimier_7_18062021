@@ -106,11 +106,11 @@ exports.updateText = (req, res) => {
       description: parseBody.description,
     };
   }
-  // console.log(text)
+ 
   Text.findByPk(id)
   .then(data => {
     var unlinkFilename = null
-    console.log(text.imageUrl)
+
     if (data.imageUrl != null && imgToDelete == true ) {
       const filename = data.imageUrl.split('/images/')[1];
       var unlinkFilename = `app//images/${filename}`
@@ -137,7 +137,6 @@ exports.deleteText = (req, res) => {
   .then(data => {
     var unlinkFilename = null
     if (data.imageUrl != null) {
-      console.log(data.imageUrl)
       const filename = data.imageUrl.split('/images/')[1];
       var unlinkFilename = `app//images/${filename}`
     } else {
