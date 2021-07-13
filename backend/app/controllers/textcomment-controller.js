@@ -3,6 +3,7 @@ const TextComment = bdd.textComment;
 const Text = bdd.textPost;
 const Op = bdd.Sequelize.Op;
 
+// create a comment with body information 
 exports.createComment = (req, res, next) => {
   if (!req.body.description || !req.body.textPostId || !req.body.username) {
     res.status(400).send({
@@ -19,7 +20,7 @@ exports.createComment = (req, res, next) => {
   .then(data => {
     res.send(data)
 
-    // ICI on a rajouté la fonction pour mettre à jour le nb de comments pour un texte 
+    // Here, we add a function witch update the number of comments for an id text when creating the comment 
     var condition = data.textPostId ? { textPostId: { [Op.like]: `%${data.textPostId}%` } } : null ;
     TextComment.findAll({ 
       where: condition,
@@ -43,9 +44,8 @@ exports.createComment = (req, res, next) => {
   .catch(error => res.status(400).json({ error }));
 };
 
-  
 
-// Récupération de tous les commentaires d'une id d'un post
+// Find all comments with a specific text Id
 exports.findAllComments = (req, res) => {
   const textPostId = req.params.postId;
   var condition = textPostId ? { textPostId: { [Op.like]: `%${textPostId}%` } } : null ;
@@ -59,12 +59,11 @@ exports.findAllComments = (req, res) => {
   .catch(error => {res.status(500).send({ error });});
 };
 
-// Suppression d'un commentaire (pour Moderator role) avec une id de commentaire
+// Delete a comment woth specific id (only for moderator)
 exports.deleteComment = (req, res) => {
   const id = req.params.id;
 
-// Récupérer le commentaire pour connaitre l'id du post 
-
+// Find the id text for the comment  
 TextComment.findByPk(id)
   .then(data => {
     TextComment.destroy({
@@ -73,7 +72,7 @@ TextComment.findByPk(id)
     .then(() => {
       res.send(data)
   
-      // ICI on a rajouté la fonction pour mettre à jour le nb de comments pour un texte  
+      // Here, we add a function witch update the number of comments for an id text when deleting the comment 
       var condition = data.textPostId ? { textPostId: { [Op.like]: `%${data.textPostId}%` } } : null ;
       TextComment.findAll({ 
         where: condition,
@@ -103,9 +102,7 @@ TextComment.findByPk(id)
 };
 
 
-
-
-// modifie un commentaire avec un id donné
+// modify a comment with specific id
 exports.updateComment = (req, res) => {
   if (!req.body.description) {
     res.status(400).send({
@@ -114,27 +111,16 @@ exports.updateComment = (req, res) => {
     return;
   }
   
-  
   const id = req.params.id;
 
   TextComment.update(
     {description: req.body.description}, 
     {where: { id: id }}
   )
-    .then(num => {
-      if (num == 1) {
-        res.send({
-          message: "Tutorial was updated successfully."
-        });
-      } else {
-        res.send({
-          message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found or req.body is empty!`
-        });
-      }
-    })
-    .catch( () => {
-      res.status(500).send({
-        message: "Error updating Tutorial with id=" + id
-      });
+  .then(() => {res.send({message: "Text was deleted."})})
+  .catch( () => {
+    res.status(500).send({
+      message: "Error updating Tutorial with id=" + id
     });
+  });
 };

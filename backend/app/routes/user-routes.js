@@ -5,9 +5,9 @@ const userCtrl = require('../controllers/user-controller');
 const userAccount = require('../middleware/user-account');
 
 
-router.post('/signup', validPasswords, userCtrl.signup); // s'enregistrer'
-router.post('/signin', userCtrl.signin); // se connecter 
-router.delete("/:id", userAccount, userCtrl.deleteUser); // Suppression de compte
-router.get("/:id", userAccount, userCtrl.seeUser); // trouver un user
+router.post('/signup', validPasswords, userCtrl.signup); // route to signup
+router.post('/signin', userCtrl.signin); // route to login
+router.delete("/:id", userAccount, userCtrl.deleteUser); // Deletion of user account
+router.get("/:id", userAccount, userCtrl.seeUser); // find a user
 
 module.exports = router;

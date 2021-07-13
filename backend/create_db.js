@@ -1,14 +1,13 @@
-// Gestion des variables d'environnement
+// Management of environment variables
 const dotenv = require("dotenv");
 dotenv.config();
+
 
 const bddConfig = require("./app/config/bdd-config.js");
 const Sequelize = require("sequelize");
 
 
-
-
-// connexion à "host" pour créer la database
+// connection to "host" to create database
 const sequelizeCreateDB = new Sequelize("", bddConfig.USER, bddConfig.PASSWORD, {
   host: bddConfig.HOST,
   dialect: bddConfig.dialect,
@@ -22,7 +21,7 @@ const sequelizeCreateDB = new Sequelize("", bddConfig.USER, bddConfig.PASSWORD, 
   }
 });
 
-// connexion à la database pour créer les tables et les remplir
+// connection to the database to create tables and fill it
 const sequelize = new Sequelize(bddConfig.DB, bddConfig.USER, bddConfig.PASSWORD, {
   host: bddConfig.HOST,
   dialect: bddConfig.dialect,
@@ -62,30 +61,25 @@ bdd.textPost.hasMany(bdd.textComment,{
 bdd.textComment.belongsTo(bdd.textPost);
   
 
-// Creation de la database puis des tables
+// Creation of the database and when done, create tables and fill it
 sequelizeCreateDB.query("CREATE DATABASE " + bddConfig.DB + ";")
 .then( () => {
-
   
- 
   bdd.sequelize.sync({ force: true }).then(() => {
     initial();
   });
 
-
-  
-
-
 })
-// remplissage des données de la BDD
+
+// filling the tables
 function initial() {
 
-  // remplissage des roles possibles
+  // roles filling
   bdd.role.create({id: 1, name: "user"});
   bdd.role.create({id: 2, name: "moderator"});
   bdd.role.create({id: 3, name: "admin"});
 
-  // remplissage des articles et des commentaires
+  // texts and comments filling
   bdd.textPost.create({
     title: "La france éliminée de l'euro...", 
     description: "DESCRIPTION_2", 
@@ -134,7 +128,7 @@ function initial() {
 
   
 
-  // remplissage des users avec affectation d'un rôle.
+  // user filling and set role
   bdd.user.create({username: "user1", email: "7043be4de9abf54f13af31ea561fcc53f33a75e0", password: "$2b$10$ELC/PH5WILKfB2tfzxCSYeYKeojdGwrDRSRHd87L7WeB2S/lkaYKa"})
   .then(data => {
     data.setRoles([1]);

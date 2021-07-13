@@ -12,6 +12,7 @@ module.exports = (req, res, next) => {
         const username = decodedToken.username;
         var roleVerified = false;
 
+        // verify the role of the user : MODERATOR is needed
         User.findOne({
             where: {
                 username: username

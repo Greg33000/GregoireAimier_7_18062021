@@ -4,9 +4,9 @@ const authUser = require('../middleware/auth-user');
 const authModerator = require('../middleware/auth-moderator');
 const textCommentsCtrl = require("../controllers/textcomment-controller.js");
 
-router.post("/new", authUser, textCommentsCtrl.createComment); // Créer un nouveau commentaire
-router.get("/:postId",authUser, textCommentsCtrl.findAllComments); // Retrouver tous les commentaires pour un id donné
-router.delete("/:id", authModerator, textCommentsCtrl.deleteComment); // supprimer un commentaire pour un id donné (moderateur)
-router.put("/:id", authModerator, textCommentsCtrl.updateComment); // modifier un commentaire pour un id donné (moderateur)
+router.post("/new", authUser, textCommentsCtrl.createComment); // Create a new comment
+router.get("/:postId",authUser, textCommentsCtrl.findAllComments); // get all comments with text id
+router.delete("/:id", authModerator, textCommentsCtrl.deleteComment); // Delete a comment with text id (moderator)
+router.put("/:id", authModerator, textCommentsCtrl.updateComment); // modify a comment with text id (moderator)
 
 module.exports = router;

@@ -1,8 +1,7 @@
 const express = require('express');
-
 const helmet = require("helmet");
 
-// Gestion des variables d'environnement
+// Management of environment variables
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -15,7 +14,7 @@ const path = require('path');
 const app = express();
 
 
-// CORS (ports différents entre backend et frontend)
+// CORS 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization, x-access-token');
@@ -27,12 +26,12 @@ app.use((req, res, next) => {
 app.use(helmet());
 
  
-// parse application/json => deprecated. Express le fait depuis la version 4.16+
+// parse application/json => deprecated. Express do it from version 4.16+
 app.use(express.json()) // for json
 app.use(express.urlencoded({ extended: true })) // for form data
 
 
-// pour gérer la ressource image de manière statique
+// management of image ressource in static mode
 app.use('/app/images', express.static(path.join(__dirname, 'app/images')));
 
 // routes 
@@ -41,7 +40,7 @@ app.use('/api/textcomments', textCommentsRoutes);
 app.use('/api/auth', userRoutes);
 
 
-// Synchronisation avec la BDD
+// Synchronization with the database
 const bdd = require("./app/models");
 bdd.sequelize.sync();
 

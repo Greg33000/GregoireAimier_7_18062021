@@ -7,7 +7,7 @@ const config = require("../config/auth-config.js");
 const Op = bdd.Sequelize.Op;
 const cryptoJS = require("crypto-js");
 
-
+// Create a user with information in the body and create role "1" (user) 
 exports.signup = (req, res, next) => {
 
     if (!req.body.email) {
@@ -25,26 +25,11 @@ exports.signup = (req, res, next) => {
             };
             User.create(user)            
             .then(data => {
-                // if (req.body.roles) {
-                //     Role.findAll({
-                //         where: {
-                //             name: {
-                //                 [Op.or]: req.body.roles
-                //             }
-                //         }
-                //     }).then(roles => {
-                //         data.setRoles(roles)
-                //         .then(() => {
-                //             res.send({ message: "User was registered successfully!" });
-                //         });
-                //     });
-                // } else {
-                  // user role = 1
-                    data.setRoles([1])
-                    .then(() => {
-                        res.send({ message: "User was registered successfully!" });
-                    });
-                //}
+              // user role = 1
+              data.setRoles([1])
+              .then(() => {
+                res.send({ message: "User was registered successfully!" });
+              });
             })
             .catch(error => res.status(400).json({ error }));
         })
@@ -53,7 +38,7 @@ exports.signup = (req, res, next) => {
         
     
 
-
+// Find a user with information in the body and verify the role 
 exports.signin = (req, res, next) => {
 
     User.findOne({
@@ -66,7 +51,7 @@ exports.signin = (req, res, next) => {
                 return res.status(401).json({ error: 'Utilisateur introuvable !' });
             }
             
-            bcrypt.compare(req.body.password, user.password)
+            bcrypt.compare(req.body.password, user.password) // compare crypt password
             .then(valid => {
                 if (!valid) {
                     return res.status(401).json({ error: 'Mot de passe incorrect !' });
@@ -81,7 +66,6 @@ exports.signin = (req, res, next) => {
                       authorities.push("ROLE_" + roles[i].name.toUpperCase());
                     }
                     res.status(200).send({
-                    //   id: user.id,
                         username: user.username,
                         roles: authorities,
                         token: token
@@ -93,7 +77,7 @@ exports.signin = (req, res, next) => {
         .catch(error => res.status(500).json({ error }));
 };
 
-// Delete a Tutorial with the specified id in the request
+// Delete a user with the specified id (username) in the request 
 exports.deleteUser = (req, res) => {
     const username = req.params.id;
   
@@ -108,6 +92,7 @@ exports.deleteUser = (req, res) => {
     });
 };
 
+// Find one user with the specified id (username) in the request 
 exports.seeUser = (req, res) => {
     const username = req.params.id;
     

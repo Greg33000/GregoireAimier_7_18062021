@@ -3,6 +3,7 @@ const Text = bdd.textPost;
 const Op = bdd.Sequelize.Op;
 const fs = require('fs');
 
+// Create a new text.
 exports.create = (req, res, next) => {
   const parseBody = JSON.parse(req.body.post)
   
@@ -13,7 +14,7 @@ exports.create = (req, res, next) => {
     return;
   }
   var text = {};
-  if (req.file != null) {
+  if (req.file != null) { // verify if there is a file
     text = {
         title: parseBody.title,
         description: parseBody.description,
@@ -84,7 +85,7 @@ exports.updateText = (req, res) => {
 
   var text = {};
   var imgToDelete = false;
-  if (parseBody.editImage == "delete") {
+  if (parseBody.editImage == "delete") { // verifiy if the image would be deleted on the database
     text = {
       title: parseBody.title,
       description: parseBody.description,
@@ -93,20 +94,21 @@ exports.updateText = (req, res) => {
     imgToDelete = true
 
   } else 
-  if (req.file != null) {
+  if (req.file != null) { // verifiy if there is a new image. If yes, put the new url in database
     text = {
       title: parseBody.title,
       description: parseBody.description,
       imageUrl: `${req.protocol}://${req.get('host')}/app/images/${req.file.filename}`,
     };
     imgToDelete = true
-  } else {
+  } else { // Here is that there is not a new file : the previous image is kept
     text = {
       title: parseBody.title,
       description: parseBody.description,
     };
   }
  
+  // Find the text with id to get the name of file to unlink it if available 
   Text.findByPk(id)
   .then(data => {
     var unlinkFilename = null
@@ -130,7 +132,7 @@ exports.updateText = (req, res) => {
   .catch(error => res.status(500).json({ error }));
 };
 
-// Delete text-post with the specified id in the request
+// Delete text-post with the specified id in the request and unlink the image if available
 exports.deleteText = (req, res) => {
   const id = req.params.id;
   Text.findByPk(id)
