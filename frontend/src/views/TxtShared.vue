@@ -7,7 +7,7 @@
         <b-jumbotron>
           <b-row>
             <b-col cols="12" class="input-group mb-3 justify-content-center">
-              <b-input type="text" class="form-control" placeholder="Chercher un titre" v-model="title"/>
+              <b-input type="text" class="form-control" placeholder="Chercher un titre" aria-label="Chercher un titre" v-model="title"/>
               <b-button variant="outline-secondary"  @click="seeAllPosts('')">Chercher</b-button>
               <b-button variant="outline-secondary" @click="refreshList">Réinitialiser</b-button>
             </b-col>
@@ -36,14 +36,18 @@
                 v-for="(post, index) in posts"
                 :key="index"
                 >
+                <!-- Article whitch contains header / "body" and footer -->
                 <article class="overflow-auto">
+                  <!-- header of the article. Contains the username + timestamp of the post -->
                   <header class="putInItalic">publié par 
                     <a class="text-danger itemClick" @click="seeAllPosts(post)" >{{ post.username }}</a> 
                     il y a {{ datePost(post.createdAt) }}</header>
+                  <!-- "body" of the article. Contains the title -->
                   <div class="itemClick overflow-auto"  @click="setActivePost(post)">
                     <h2>{{ post.title }}</h2>
-                    <!-- <p>{{ post.description }}</p> -->
+
                   </div>
+                  <!-- footer of the article with the number of comments -->
                   <footer>
                     <div class="border-0 putInItalic text-secondary" >
                       <!-- comment icon -->
@@ -70,7 +74,7 @@
 import HeaderComponent from '../components/HeaderComponent.vue'
 
 export default {
-  name: 'HeaderCompo',
+  name: 'TxtShared',
   components: {
     HeaderComponent,
     
@@ -79,8 +83,6 @@ export default {
   data() {
     return {
       posts: [],
-      // currentPost: null,
-      // currentIndex: -1,
       title: "",
       today: new Date(Date.now()),
       username:"",
@@ -167,8 +169,6 @@ export default {
       this.title = "";
       this.username = "";
       this.seeAllPosts("");
-      // this.currentPost = null;
-      // this.currentIndex = -1;
     },
 
     // When clicking on a post, go to a new route with postId parameter in url.

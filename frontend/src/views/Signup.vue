@@ -1,59 +1,69 @@
+<!-- This is the signup page. -->
+
 <template>
   <div class="home h-100">
     <b-container>
+
+    <!-- If max-width of the screen is > 540 px this part is active. The logo and inputs are in line . -->
       <b-jumbotron v-if="maxWidth === false" >
         <b-row class="h-100 align-items-center">
           <b-col cols="6">
             <img alt="Icone entreprise" src="../assets/icon-above-font.svg">
           </b-col>
+          <!-- nav item to go to signup and signin . -->
           <b-col cols="6">
             <b-nav tabs>
               <b-nav-item class="align-self-end navColor" v-bind:active="false" tag="router-link" to="/signin">Se connecter</b-nav-item>
               <b-nav-item class="align-self-end navColor" v-bind:active="true" tag="router-link" to="/signup" >Créer un compte</b-nav-item>
             </b-nav>
+            <!-- input to complete to create account . -->
             <b-card bg-variant="light">   
               <b-form-group class="my-3">
-        <b-input for="username" type="text" v-model="username" class="form-control" placeholder="Nom d'utilisateur" required/>
-    </b-form-group>
-    <b-form-group class="my-3">
-        <b-input for="email" type="email" v-model="email" class="form-control" placeholder="Adresse email" required/>
-    </b-form-group>
-    <b-form-group  class="my-3">
-        <b-input type="password" v-model="password" class="form-control" placeholder="Mot de passe" required/>
-    </b-form-group>
-    <b-form-group  class="my-3">
-        <b-col class="text-center">
-            <b-button class="mx-2 my-1" variant="primary"  @click="createUser">Créer un compte</b-button>
-        </b-col>             
-    </b-form-group> 
-    <p class="text-center text-danger">{{msgError}}</p> 
+                <b-input type="text" v-model="username" class="form-control" placeholder="Nom d'utilisateur" aria-label="Nom d'utilisateur" required/>
+              </b-form-group>
+              <b-form-group class="my-3">
+                <b-input type="email" v-model="email" class="form-control" placeholder="Adresse email" aria-label="Adresse email" required/>
+              </b-form-group>
+              <b-form-group  class="my-3">
+                <b-input type="password" v-model="password" class="form-control" placeholder="Mot de passe" aria-label="Mot de passe" required/>
+              </b-form-group>
+              <b-form-group  class="my-3">
+                <b-col class="text-center">
+                  <b-button class="mx-2 my-1" variant="primary"  @click="createUser">Créer un compte</b-button>
+                </b-col>             
+              </b-form-group> 
+              <p class="text-center text-danger">{{msgError}}</p> 
             </b-card>
           </b-col>
         </b-row>
       </b-jumbotron>
+
+      <!-- If max-width of the screen is > 540 px this part is active. The logo and inputs are in column . -->
       <b-jumbotron v-if="maxWidth === true" >
         <b-row class="h-100 align-items-center">
           <img id="img" alt="Icone entreprise" src="../assets/icon-above-font.svg">
+          <!-- nav item to go to signup and signin . -->
           <b-nav tabs>
             <b-nav-item class="align-self-end navColor" v-bind:active="false" tag="router-link" to="/signin">Se connecter</b-nav-item>
             <b-nav-item class="align-self-end navColor" v-bind:active="true" tag="router-link" to="/signup" >Créer un compte</b-nav-item>
           </b-nav>
+          <!-- input to complete to create account . -->
           <b-card bg-variant="light">   
             <b-form-group class="my-3">
-        <b-input for="username" type="text" v-model="username" class="form-control" placeholder="Nom d'utilisateur" required/>
-    </b-form-group>
-    <b-form-group class="my-3">
-        <b-input for="email" type="email" v-model="email" class="form-control" placeholder="Adresse email" required/>
-    </b-form-group>
-    <b-form-group  class="my-3">
-        <b-input type="password" v-model="password" class="form-control" placeholder="Mot de passe" required/>
-    </b-form-group>
-    <b-form-group  class="my-3">
-        <b-col class="text-center">
-            <b-button class="mx-2 my-1" variant="primary"  @click="createUser">Créer un compte</b-button>
-        </b-col>             
-    </b-form-group> 
-    <p class="text-center text-danger">{{msgError}}</p> 
+              <b-input type="text" v-model="username" class="form-control" placeholder="Nom d'utilisateur" aria-label="Nom d'utilisateur" required/>
+            </b-form-group>
+            <b-form-group class="my-3">
+              <b-input type="email" v-model="email" class="form-control" placeholder="Adresse email" aria-label="Adresse email" required/>
+            </b-form-group>
+            <b-form-group  class="my-3">
+              <b-input type="password" v-model="password" class="form-control" placeholder="Mot de passe" aria-label="Mot de passe" required/>
+            </b-form-group>
+            <b-form-group  class="my-3">
+              <b-col class="text-center">
+                <b-button class="mx-2 my-1" variant="primary"  @click="createUser">Créer un compte</b-button>
+              </b-col>             
+            </b-form-group> 
+            <p class="text-center text-danger">{{msgError}}</p> 
           </b-card>
         </b-row>
       </b-jumbotron>
@@ -63,120 +73,129 @@
 
 <script>
 
-
-export default {
-  name: "Signup",
-  data() {
-      return {
-        email: '',
-        password: '',
-        username: '',
-        msgError: ''
-      }
-    },
-  
-  // attributs calculés
-  computed: {
-    emailValid() {
-        if (this.email.indexOf("@") >= 1 & this.email.indexOf(".",this.email.indexOf("@")) != -1 & this.email.indexOf(" ") == -1) {
-          return 1
-        } else {return 0}
+  export default {
+    name: "Signup",
+    data() {
+        return {
+          email: '',
+          password: '',
+          username: '',
+          msgError: ''
+        }
       },
+    
+    computed: {
+
+      // to verify if email is valid (not empty, @, 1 point and no blank)
+      emailValid() {
+          if (this.email.indexOf("@") >= 1 & this.email.indexOf(".",this.email.indexOf("@")) != -1 & this.email.indexOf(" ") == -1) {
+            return 1;
+          } else {return 0;}
+        },
+
+      // to verify if password is valid (not empty and no blank)
       passwordValid() {
         if (this.password.indexOf(" ") == -1 & this.password != '') {
-          return 1
-        } else {return 0}
+          return 1;
+        } else {return 0;}
       },
+
+      // to verify if username is valid (not empty and no blank)
       usernameValid() {
         if (this.username.indexOf(" ") == -1 & this.username != '') {
-          return 1
-        } else {return 0}
+          return 1;
+        } else {return 0;}
       },
+
+      // to verify if the form is valid (password valid, email valid and username valid)
       formValid() {
         if ((this.emailValid * this.passwordValid * this.usernameValid) == 1 ) {
-          return true
+          return true;
         }
-        else {return false}
+        else {return false;}
       },
-    maxWidth() {
-      if (window.matchMedia("(max-width: 770px)").matches) {
-        return true
-      } else { return false } 
+
+       // calculate the maxWidth of the screen 
+      maxWidth() {
+        if (window.matchMedia("(max-width: 770px)").matches) {
+          return true;
+        } else { return false; } 
+      },
     },
-  },
-  methods: {
+    methods: {
 
-      errorForm() {
-        if (this.passwordValid == 0 & this.emailValid == 1 & this.usernameValid == 1 ) {
-          this.msgError = "Votre mot de passe n'est pas valide"
-          return this.msgError
-        }
-        if (this.passwordValid == 0 & this.emailValid == 1 & this.usernameValid == 0 ) {
-          this.msgError = "Votre nom d'utilisateur et votre mot de passe ne sont pas valides"
-          return this.msgError
-        }
-        if (this.passwordValid == 1 & this.emailValid == 0 & this.usernameValid == 1 ) {
-          this.msgError = "Votre email n'est pas valide"
-          return this.msgError
-        }
-        if (this.passwordValid == 1 & this.emailValid == 0 & this.usernameValid == 0 ) {
-          this.msgError = "Votre nom d'utilisateur et votre email ne sont pas valides"
-          return this.msgError
-        }
-        if (this.passwordValid == 0 & this.emailValid == 0 & this.usernameValid == 1) {
-          this.msgError = "Votre email et votre mot de passe ne sont pas valides"
-          return this.msgError
-        }
-        if (this.passwordValid == 0 & this.emailValid == 0 & this.usernameValid == 0) {
-          this.msgError = "Votre nom d'utilisateur, votre email et votre mot de passe ne sont pas valides"
-          return this.msgError
-        }
-        if (this.passwordValid == 1 & this.emailValid == 1 & this.usernameValid == 1) {
-          this.msgError = ""
-          return this.msgError
-        }
-        if (this.passwordValid == 1 & this.emailValid == 1 & this.usernameValid == 0) {
-          this.msgError = "Votre nom d'utilisateur n'est pas valide"
-          return this.msgError
-        }
-        
-      },
-            
-      createUser() {
-        this.errorForm()
-        if (this.formValid == true) {
-          let jsonBody = { 
-            "email": this.email,
-            "password": this.password,
-            "username": this.username,
-          };
-          fetch("http://localhost:3000/api/auth/signup ", {
-            method: "POST",
-            headers: {
-              'Accept': 'application/json', 
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(jsonBody)
-          })
+        // complete a error message to know what is the problem (for user)
+        errorForm() {
+          if (this.passwordValid == 0 & this.emailValid == 1 & this.usernameValid == 1 ) {
+            this.msgError = "Votre mot de passe n'est pas valide";
+            return this.msgError;
+          }
+          if (this.passwordValid == 0 & this.emailValid == 1 & this.usernameValid == 0 ) {
+            this.msgError = "Votre nom d'utilisateur et votre mot de passe ne sont pas valides";
+            return this.msgError;
+          }
+          if (this.passwordValid == 1 & this.emailValid == 0 & this.usernameValid == 1 ) {
+            this.msgError = "Votre email n'est pas valide";
+            return this.msgError;
+          }
+          if (this.passwordValid == 1 & this.emailValid == 0 & this.usernameValid == 0 ) {
+            this.msgError = "Votre nom d'utilisateur et votre email ne sont pas valides";
+            return this.msgError;
+          }
+          if (this.passwordValid == 0 & this.emailValid == 0 & this.usernameValid == 1) {
+            this.msgError = "Votre email et votre mot de passe ne sont pas valides";
+            return this.msgError;
+          }
+          if (this.passwordValid == 0 & this.emailValid == 0 & this.usernameValid == 0) {
+            this.msgError = "Votre nom d'utilisateur, votre email et votre mot de passe ne sont pas valides";
+            return this.msgError;
+          }
+          if (this.passwordValid == 1 & this.emailValid == 1 & this.usernameValid == 1) {
+            this.msgError = "";
+            return this.msgError;
+          }
+          if (this.passwordValid == 1 & this.emailValid == 1 & this.usernameValid == 0) {
+            this.msgError = "Votre nom d'utilisateur n'est pas valide";
+            return this.msgError;
+          }
+          
+        },
+              
+        // to send to the back the POST route to create account
+        createUser() {
+          this.errorForm()
+          if (this.formValid == true) {
+            let jsonBody = { 
+              "email": this.email,
+              "password": this.password,
+              "username": this.username,
+            };
+            fetch("http://localhost:3000/api/auth/signup ", {
+              method: "POST",
+              headers: {
+                'Accept': 'application/json', 
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(jsonBody)
+            })
 
-          .then(function(res) {
-              return res.json();
-          })
+            .then(function(res) {
+                return res.json();
+            })
 
-          .then(value => {
-            if (!value.error) {
-              this.msgError = "Inscription effectuée. Vous pouvez vous connecter"
-              return this.msgError
-            } else {
-              this.msgError = value.error.toString()
-              return this.msgError
-            }
-        });
-        }
-      }, 
+            .then(value => {
+              if (!value.error) {
+                this.msgError = "Inscription effectuée. Vous pouvez vous connecter";
+                return this.msgError;
+              } else {
+                this.msgError = value.error.toString();
+                return this.msgError;
+              }
+            });
+          }
+        }, 
+    }
   }
-}
-
 
 </script>
 
@@ -186,12 +205,11 @@ export default {
     margin: -20% 0%;
   };
   a {
-      font-weight: bold;
-      color: #2c3e50;
-      text-decoration: none;
-
-    }
-    .nav-link .navColor {
-        color: #495057;
-    }
+    font-weight: bold;
+    color: #2c3e50;
+    text-decoration: none;
+  };
+  .nav-link .navColor {
+    color: #495057;
+  };
 </style>
