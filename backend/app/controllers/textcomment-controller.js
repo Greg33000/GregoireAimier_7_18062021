@@ -117,7 +117,7 @@ exports.updateComment = (req, res) => {
     {description: req.body.description}, 
     {where: { id: id }}
   )
-  .then(() => {res.send({message: "Text was deleted."})})
+  .then(() => {res.send({message: "Text was updated."})})
   .catch( () => {
     res.status(500).send({
       message: "Error updating Tutorial with id=" + id

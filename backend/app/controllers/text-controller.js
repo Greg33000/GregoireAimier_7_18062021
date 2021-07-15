@@ -125,7 +125,7 @@ exports.updateText = (req, res) => {
         where: { id: id }
       })
 
-      .then(() => {res.send({message: "Text was deleted."})})
+      .then(() => {res.send({message: "Text was updated."})})
       .catch(error => res.status(400).json({ error }))
     });
   })

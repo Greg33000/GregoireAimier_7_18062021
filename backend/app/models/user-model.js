@@ -3,12 +3,12 @@ module.exports = (sequelize, Sequelize) => {
     username: {
       type: Sequelize.STRING,
       allowNull: false,
-      unique: "unique"
+      unique: true
     },
     email: {
       type: Sequelize.STRING,
       allowNull: false,
-      unique: "unique"
+      unique: true
     },
     password: {
       type: Sequelize.STRING,

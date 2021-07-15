@@ -160,7 +160,7 @@
           })
 
           .then(value => {
-            if (!value.error) { // if no error, put in vuex store some informations ang go to hame page
+            if (!value.error) { // if no error, put in vuex store some informations and go to home page
               this.setUser(value.username);
               this.setToken(value.token);
               this.setRoles(value.roles);

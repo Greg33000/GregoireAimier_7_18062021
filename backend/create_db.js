@@ -82,7 +82,7 @@ function initial() {
   // texts and comments filling
   bdd.textPost.create({
     title: "La france éliminée de l'euro...", 
-    description: "DESCRIPTION_2", 
+    description: "Ballot", 
     imageUrl: null, 
     username: "user2", 
     nbComments: 1
